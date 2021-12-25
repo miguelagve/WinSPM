@@ -1527,10 +1527,14 @@ begin
     Edit1.Text:=S;
 
     FileForm.Label5.Caption:=ExtractFileDir(SaveDialog1.FileName);
-    LinerForm.Edit1.Text:=Edit1.Text;
-    LinerForm.SaveDialog1.FileName := ChangeFileExt(SaveDialog1.FileName, '');
-    //CreateDir(FileForm.Label5.Caption+'\IV');
-    FileForm.Label6.Caption:=FileForm.Label5.Caption;
+    //Cambiamos el directorio y normbre de las IV solo si es una espectro
+    if Checkbox2.Checked then
+    begin
+      LinerForm.Edit1.Text:=Edit1.Text;
+      LinerForm.SaveDialog1.FileName := ChangeFileExt(SaveDialog1.FileName, '');
+      //CreateDir(FileForm.Label5.Caption+'\IV');
+      FileForm.Label6.Caption:=FileForm.Label5.Caption;
+    end;
   end;
 end;
 

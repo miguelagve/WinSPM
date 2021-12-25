@@ -17,7 +17,7 @@ type
   TCitsImage = array of TCitsLine;  // Todas las rampas IV de una imagen
   TImageSingle = Array [0..512,0..512] of Single;
 
-  TForm1 = class(TForm)
+  TScanForm = class(TForm)
     Button1: TButton;
     Button2: TButton;
     Button4: TButton;
@@ -171,7 +171,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  ScanForm: TScanForm;
 
 implementation
 
@@ -184,40 +184,40 @@ var
 
 {$R *.DFM}
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TScanForm.Button4Click(Sender: TObject);
 begin
-Form2.Show;
+ConfigForm.Show;
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TScanForm.FormShow(Sender: TObject);
 begin
   //control sobre si la versión del LHA contiene divisores o no
 if Application.MessageBox('LHA Version with multiple dividers ?','LHA version', MB_YESNO)=IDYES
   then VersionDivider:=True
   else VersionDivider:=False;
 
-Form2.Show;
-XDAC:=Form2.SpinEdit1.Value;
-YDAC:=Form2.SpinEdit2.Value;
-XDAC_Pos:=Form2.SpinEdit6.Value;
-YDAC_Pos:=Form2.SpinEdit7.Value;
-AmpX:=StrtoFloat(Form2.Combobox1.Text);
-AmpY:=StrtoFloat(Form2.Combobox2.Text);
-AmpX_Pos:=StrtoFloat(Form2.Combobox6.Text);
-AmpY_Pos:=StrtoFloat(Form2.Combobox7.Text);
-CalX:=StrtoFloat(Form2.Edit1.Text);
-CalY:=StrtoFloat(Form2.Edit2.Text);
-ADCTopo:=Form2.SpinEdit3.Value;
-ADCI:=Form2.SpinEdit4.Value;
-AmpTopo:=StrtoFloat(Form2.Combobox3.Text);
-AmpI:=power(10,-1*StrtoFloat(Form2.Combobox4.Text));
-CalTopo:=StrtoFloat(Form2.Edit3.Text);
-MultI:=StrtoInt(Form2.Edit4.Text);
-ReadTopo:=Form2.Checkbox1.checked;
-ReadCurrent:=Form2.Checkbox2.checked;
+ConfigForm.Show;
+XDAC:=ConfigForm.SpinEdit1.Value;
+YDAC:=ConfigForm.SpinEdit2.Value;
+XDAC_Pos:=ConfigForm.SpinEdit6.Value;
+YDAC_Pos:=ConfigForm.SpinEdit7.Value;
+AmpX:=StrtoFloat(ConfigForm.Combobox1.Text);
+AmpY:=StrtoFloat(ConfigForm.Combobox2.Text);
+AmpX_Pos:=StrtoFloat(ConfigForm.Combobox6.Text);
+AmpY_Pos:=StrtoFloat(ConfigForm.Combobox7.Text);
+CalX:=StrtoFloat(ConfigForm.Edit1.Text);
+CalY:=StrtoFloat(ConfigForm.Edit2.Text);
+ADCTopo:=ConfigForm.SpinEdit3.Value;
+ADCI:=ConfigForm.SpinEdit4.Value;
+AmpTopo:=StrtoFloat(ConfigForm.Combobox3.Text);
+AmpI:=power(10,-1*StrtoFloat(ConfigForm.Combobox4.Text));
+CalTopo:=StrtoFloat(ConfigForm.Edit3.Text);
+MultI:=StrtoInt(ConfigForm.Edit4.Text);
+ReadTopo:=ConfigForm.Checkbox1.checked;
+ReadCurrent:=ConfigForm.Checkbox2.checked;
 
 
-//Form2.Hide;
+//ConfigForm.Hide;
 XOffset := 0;
 YOffset := 0;
 PosXSTM:=0;
@@ -227,27 +227,27 @@ DacvalY:=0;
 StopAction:=False;
 PauseAction:=False;
 P_Scan_Lines:=StrtoInt(ComboBox2.Text);
-IV_Scan_Lines:=StrToInt(Form11.ComboBox1.Text);
+IV_Scan_Lines:=StrToInt(Config_IVForm.ComboBox1.Text);
 P_Scan_Mean:=Trackbar1.Position;
 P_Scan_Jump:= Trackbar2.Position;
 P_Scan_Size:=Trackbar3.Position/1000;
 
 // Preparamos el fichero o los ficheros temporales para manejar los CITs en formato WSxM
 CreateCitsTempFiles();
-RedimCits(IV_Scan_Lines, Form4.PointNumber);
+RedimCits(IV_Scan_Lines, LinerForm.PointNumber);
 
 //Limpiar:=True;
 contadorIV:=1;
 
 PuntosTotales:=P_Scan_Lines*P_Scan_Lines*2;
 
-Label30.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*Form10.attenuator*10,ffFixed,2,1);
-Label32.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*Form10.attenuator*10*CalX,ffFixed,2,1);
+Label30.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10,ffFixed,2,1);
+Label32.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10*CalX,ffFixed,2,1);
 TrackBar3Change(nil); // Simulo que se ha cambiado el tamaño para que acutalice la interfaz
 SizeOfWindow:=400;
 StopAction:=True;
-Form4.Show;
-Form5.Show;
+LinerForm.Show;
+TripForm.Show;
 FormPID.Show;
 //Count_Live:= FormPID.SpinEdit4.Value;
 //take_initialize;
@@ -257,7 +257,7 @@ Button9Click(nil);
 Update(nil);
 end;
 
-procedure TForm1.PaintBox1DblClick(Sender: TObject);
+procedure TScanForm.PaintBox1DblClick(Sender: TObject);
 var
 pntClicked: TPoint;
 pntClickedFloat: TPointFloat;
@@ -269,7 +269,7 @@ begin
   SetNewOffset(pntClickedFloat);
 end;
 
-procedure TForm1.SetNewOffset(pntClickedFloat: TPointFloat);
+procedure TScanForm.SetNewOffset(pntClickedFloat: TPointFloat);
 var
 Princ,Fin: Integer;
 
@@ -299,38 +299,38 @@ begin
   Update(nil);
 end;
 
-procedure TForm1.TrackBar3Change(Sender: TObject);
+procedure TScanForm.TrackBar3Change(Sender: TObject);
 
 begin
 P_Scan_Size_Old:=P_Scan_Size;
 Label8.Caption:=InttoStr(Trackbar3.Position);
 P_Scan_Size:=Trackbar3.Position/1000;
-Label30.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*Form10.attenuator*10,ffFixed,3,1);
-Label32.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*Form10.attenuator*10*CalX,ffFixed,3,1);
+Label30.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10,ffFixed,3,1);
+Label32.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10*CalX,ffFixed,3,1);
 Update(nil);
 end;
 
-procedure TForm1.TrackBar2Change(Sender: TObject);
+procedure TScanForm.TrackBar2Change(Sender: TObject);
 begin
 Label6.Caption:=InttoStr(Trackbar2.Position);
 P_Scan_Jump:= Trackbar2.Position;
-Form3.TrackBar2.Position:=TrackBar2.Position;
+ScanningForm.TrackBar2.Position:=TrackBar2.Position;
 TiempoMedio:=0;
 PuntosPonderados:=0;
 TiempoInicial:=0; // Inidicamos que no es un tiempo válido
 end;
 
-procedure TForm1.TrackBar1Change(Sender: TObject);
+procedure TScanForm.TrackBar1Change(Sender: TObject);
 begin
 Label4.Caption:=InttoStr(Trackbar1.Position);
 P_Scan_Mean:=Trackbar1.Position;
-Form3.TrackBar1.Position:=TrackBar1.Position;
+ScanningForm.TrackBar1.Position:=TrackBar1.Position;
 TiempoMedio:=0;
 PuntosPonderados:=0;
 TiempoInicial:=0; // Inidicamos que no es un tiempo válido
 end;
 
-procedure TForm1.Button9Click(Sender: TObject);
+procedure TScanForm.Button9Click(Sender: TObject);
 var
 pointCenter: TPointFloat;
 
@@ -339,16 +339,16 @@ begin
   ScrollBar3.Position:=Round(ScrollBar3.max/2);
   pointCenter.x := 0;
   pointCenter.y := 0;
-  Form1.SetNewOffset(pointCenter);
+  ScanForm.SetNewOffset(pointCenter);
 end;
 
-procedure TForm1.Button10Click(Sender: TObject);
+procedure TScanForm.Button10Click(Sender: TObject);
 begin
-Form3.CheckBox1.Checked:=False;
+ScanningForm.CheckBox1.Checked:=False;
 StopAction:=True;
 end;
 
-procedure TForm1.SetCanvasZoomFactor(Canvas: TCanvas; AZoomFactor: Integer);
+procedure TScanForm.SetCanvasZoomFactor(Canvas: TCanvas; AZoomFactor: Integer);
 
 begin
   if AZoomFactor = 100 then
@@ -361,7 +361,7 @@ begin
   end;
 end;
 
-Procedure TForm1.SetCanvasZoomAndRotation(ACanvas: TCanvas; Zoom: Double;
+Procedure TScanForm.SetCanvasZoomAndRotation(ACanvas: TCanvas; Zoom: Double;
   Angle: Double; CenterpointX, CenterpointY: Double);
 var
   form: tagXFORM;
@@ -379,12 +379,12 @@ begin
   SetWorldTransform(ACanvas.Handle, form);
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TScanForm.PaintBox1Paint(Sender: TObject);
 begin
 Update(nil);
 end;
 
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TScanForm.ComboBox1Change(Sender: TObject);
 var
   halfScrollSize, oldPosX, oldPosY: Single;
 const
@@ -422,14 +422,14 @@ begin
   Update(nil);
 end;
 
-procedure TForm1.ComboBox2Change(Sender: TObject);
+procedure TScanForm.ComboBox2Change(Sender: TObject);
 begin
 P_Scan_Lines:=StrtoInt(ComboBox2.Text);  // Número de filas y columnas
-Form11.ComboBox1.ItemIndex := ComboBox2.ItemIndex;
-Form11.ComboBox1Change(nil)
+Config_IVForm.ComboBox1.ItemIndex := ComboBox2.ItemIndex;
+Config_IVForm.ComboBox1Change(nil)
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TScanForm.Button2Click(Sender: TObject);
 var
 k, Prin: Integer;
 A:Boolean;
@@ -442,7 +442,7 @@ if CheckBox2.Checked=True then A:=True;
 CheckBox2.Checked:=False;
 StopAction:=False;
 Button10.Enabled:=True;
-Form3.Show;
+ScanningForm.Show;
 
 //Llevar el DAC a la posición inicial
 Prin:=Round(int(32767*P_Scan_Size));
@@ -453,12 +453,12 @@ else MoveDac(nil, YDAC, 0, -Prin, P_Scan_Jump, nil); // Scan en Y Hay que llevar
 while (StopAction<>True) do
  begin
    k:=k+1;
-   TryStrToInt(Form3.SpinEdit1.Text, EraseLines);
+   TryStrToInt(ScanningForm.SpinEdit1.Text, EraseLines);
  MakeLine(nil, False, 0);
  Application.ProcessMessages;
  if (k>=EraseLines) then
  begin
-   Form3.ClearChart();
+   ScanningForm.ClearChart();
    k:=0;
  end;
  end;
@@ -471,12 +471,12 @@ while (StopAction<>True) do
 Button10.Enabled:=False;
 //CrossPosX:=Round(DacValX/32768*200+200);
 //CrossPosY:=Round(-DacValY/32768*200+200);
-//Form1.PaintBox1DblClick(nil);  No descomentar estas línea tal cual. En lugar de eso usar la función SetNewOffset calculando previamente el punto. (0, 0) si es ir al centro.
-Form3.Close;
+//ScanForm.PaintBox1DblClick(nil);  No descomentar estas línea tal cual. En lugar de eso usar la función SetNewOffset calculando previamente el punto. (0, 0) si es ir al centro.
+ScanningForm.Close;
 if A=True then CheckBox2.Checked:=True;
 end;
 
-procedure TForm1.Makeline(Sender: TObject; Saveit: Boolean; LineNr: Integer);
+procedure TScanForm.Makeline(Sender: TObject; Saveit: Boolean; LineNr: Integer);
 var
 i,j,k,total,OldX,OldY,LastX,LastY, channelToPlot, flatten: Integer;
 Princ,Princ2,Fin,Step: Integer;
@@ -495,12 +495,12 @@ begin
   // Creamos las series (líneas que se dibujarán) en el gráfico
   ChartLineSerie0 := TFastLineSeries.Create(self);
   ChartLineSerie1 := TFastLineSeries.Create(self);
-  ChartLineSerie0.ParentChart := Form3.ChartLine;
-  ChartLineSerie1.ParentChart := Form3.ChartLine;
+  ChartLineSerie0.ParentChart := ScanningForm.ChartLine;
+  ChartLineSerie1.ParentChart := ScanningForm.ChartLine;
   ChartLineSerie0.LinePen.Color := clred;
   ChartLineSerie1.LinePen.Color := clblack;
-  Form3.ChartLine.AddSeries(ChartLineSerie0);
-  Form3.ChartLine.AddSeries(ChartLineSerie1);
+  ScanningForm.ChartLine.AddSeries(ChartLineSerie0);
+  ScanningForm.ChartLine.AddSeries(ChartLineSerie1);
 
   MakeX:=False;
 
@@ -545,20 +545,20 @@ if (IV_Scan_Lines>P_Scan_Lines) and (CheckBox2.Checked) then
 begin
   MessageDlg('Spectro: too many points',mtError,[mbOK],0);
   IV_Scan_Lines:=P_Scan_Lines;
-  RedimCits(IV_Scan_Lines, Form4.PointNumber);
+  RedimCits(IV_Scan_Lines, LinerForm.PointNumber);
 end;
 
-Form3.ChartLine.BottomAxis.SetMinMax(Min(Princ, Fin)/32768*AmpX*10*CalX, Max(Princ, Fin)/32768*AmpX*10*CalX);
+ScanningForm.ChartLine.BottomAxis.SetMinMax(Min(Princ, Fin)/32768*AmpX*10*CalX, Max(Princ, Fin)/32768*AmpX*10*CalX);
 
-if (Form3.RadioGroup1.ItemIndex = 0) then // Topo
+if (ScanningForm.RadioGroup1.ItemIndex = 0) then // Topo
 begin
   channelToPlot := 1;
-  yFactor := StrtoFloat(Form2.Edit3.Text)*StrtoFloat(Form2.Combobox3.Text);//Form1.CalTopo*Form1.AmpTopo;
+  yFactor := StrtoFloat(ConfigForm.Edit3.Text)*StrtoFloat(ConfigForm.Combobox3.Text);//ScanForm.CalTopo*ScanForm.AmpTopo;
 end
 else // Current
 begin
   channelToPlot := 2;
-  yFactor := Form1.MultI*Form1.AmpI;
+  yFactor := ScanForm.MultI*ScanForm.AmpI;
 end;
 
 //Forth
@@ -588,25 +588,25 @@ begin
 
     if (ContadorIV=P_Scan_Lines/IV_Scan_Lines) then
     begin
-      if (CheckBox2.Checked)  and (Form11.CheckBox1.Checked) then
+      if (CheckBox2.Checked)  and (Config_IVForm.CheckBox1.Checked) then
       begin
         CitsSeekToIV(Floor(LineNr/ContadorIV), Floor(i/ContadorIV), 0);  // el i cambiado por Hermann
 
         if StopAction then // Si nos han pedido que paremos ponemos a cero los valores que faltan por adquirir.
-        for k := 0 to Form4.PointNumber-1 do
+        for k := 0 to LinerForm.PointNumber-1 do
           begin
             CitsTempFile[0].Write(zeroSingle, SizeOf(zeroSingle));
             CitsTempFile[1].Write(zeroSingle, SizeOf(zeroSingle));
           end
         else // Hay que continuar con la adquisición
         begin
-          form4.Button1Click(nil); //Make IV con espectro
-          // Los datos adquiridos están en Form4.DataCurrent. Los guardamos donde toque
+          LinerForm.Button1Click(nil); //Make IV con espectro
+          // Los datos adquiridos están en LinerForm.DataCurrent. Los guardamos donde toque
           // en el orden que toque
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
-            CitsTempFile[0].Write(Form4.DataCurrent[0][k], SizeOf(Form4.DataCurrent[0][k]));
-            CitsTempFile[1].Write(Form4.DataCurrent[1][Form4.PointNumber-1-k], SizeOf(Form4.DataCurrent[1][Form4.PointNumber-1-k]));
+            CitsTempFile[0].Write(LinerForm.DataCurrent[0][k], SizeOf(LinerForm.DataCurrent[0][k]));
+            CitsTempFile[1].Write(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k], SizeOf(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k]));
           end;
         end;
         ContadorIV:=1;
@@ -626,7 +626,7 @@ begin
     end
     else
     begin
-      adcRead:=Form10.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
+      adcRead:=DataAdcquisitionForm.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
 
       if ReadTopo=True then
       begin
@@ -653,7 +653,7 @@ begin
 
     if (ContadorIV=P_Scan_Lines/IV_Scan_Lines) then
     begin
-      if (CheckBox2.Checked)  and (Form11.CheckBox1.Checked) then
+      if (CheckBox2.Checked)  and (Config_IVForm.CheckBox1.Checked) then
       begin
         CitsSeekToIV(Floor(i/ContadorIV), Floor(LineNr/ContadorIV), 0);
 
@@ -664,13 +664,13 @@ begin
         end
         else
         begin
-          form4.Button1Click(nil); //Make IV con espectro
-          // Los datos adquiridos están en Form4.DataCurrent. Los guardamos donde toque
+          LinerForm.Button1Click(nil); //Make IV con espectro
+          // Los datos adquiridos están en LinerForm.DataCurrent. Los guardamos donde toque
           // en el orden que toque
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
-            CitsTempFile[0].Write(Form4.DataCurrent[0][k], SizeOf(Form4.DataCurrent[0][k]));
-            CitsTempFile[1].Write(Form4.DataCurrent[1][Form4.PointNumber-1-k], SizeOf(Form4.DataCurrent[1][Form4.PointNumber-1-k]));
+            CitsTempFile[0].Write(LinerForm.DataCurrent[0][k], SizeOf(LinerForm.DataCurrent[0][k]));
+            CitsTempFile[1].Write(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k], SizeOf(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k]));
           end;
         end;
         ContadorIV:=1;
@@ -691,7 +691,7 @@ begin
     end
     else
     begin
-        adcRead:=Form10.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
+        adcRead:=DataAdcquisitionForm.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
       if ReadTopo=True then
       begin
         //if (DigitalPID) then
@@ -708,7 +708,7 @@ begin
 
   QueryPerformanceCounter(C2); // Lectura del cronómetro
   TiempoMedio:=(C2-TiempoInicial)/(F*PuntosPonderados+1); // El +1 es para evitar dividir entre 0. No supondrá mucho error
-  if Form3.CheckBox3.Checked then Form3.Label6.Caption:=FloatToStr(RoundTo((PuntosTotales-PuntosMedidos)*TiempoMedio,-1));
+  if ScanningForm.CheckBox3.Checked then ScanningForm.Label6.Caption:=FloatToStr(RoundTo((PuntosTotales-PuntosMedidos)*TiempoMedio,-1));
 
   Application.ProcessMessages;
   i:=i+1;
@@ -742,11 +742,11 @@ begin
     begin
       CitsSeekToIV(Floor(LineNr/ContadorIV), Floor(i/ContadorIV), 0);
 
-      if (CheckBox2.Checked)  and (Form11.CheckBox2.Checked) then
+      if (CheckBox2.Checked)  and (Config_IVForm.CheckBox2.Checked) then
       begin
         if StopAction then // Si nos han pedido que paremos ponemos a cero los valores que faltan por adquirir.
         begin
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
             CitsTempFile[2].Write(zeroSingle, SizeOf(zeroSingle));
             CitsTempFile[3].Write(zeroSingle, SizeOf(zeroSingle));
@@ -754,13 +754,13 @@ begin
         end
         else
         begin
-          form4.Button1Click(nil); //Make IV con espectro
-          // Los datos adquiridos están en Form4.DataCurrent. Los guardamos donde toque
+          LinerForm.Button1Click(nil); //Make IV con espectro
+          // Los datos adquiridos están en LinerForm.DataCurrent. Los guardamos donde toque
           // en el orden que toque
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
-            CitsTempFile[2].Write(Form4.DataCurrent[0][k], SizeOf(Form4.DataCurrent[0][k]));
-            CitsTempFile[3].Write(Form4.DataCurrent[1][Form4.PointNumber-1-k], SizeOf(Form4.DataCurrent[1][Form4.PointNumber-1-k]));
+            CitsTempFile[2].Write(LinerForm.DataCurrent[0][k], SizeOf(LinerForm.DataCurrent[0][k]));
+            CitsTempFile[3].Write(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k], SizeOf(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k]));
           end;
         end;
         ContadorIV:=1;
@@ -785,7 +785,7 @@ begin
     end
     else
     begin
-      adcRead:=Form10.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
+      adcRead:=DataAdcquisitionForm.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
       if ReadTopo=True then
       begin
         //if (DigitalPID) then
@@ -810,13 +810,13 @@ begin
 
     if (ContadorIV=P_Scan_Lines/IV_Scan_Lines) then
     begin
-      if (CheckBox2.Checked)  and (Form11.CheckBox2.Checked) then
+      if (CheckBox2.Checked)  and (Config_IVForm.CheckBox2.Checked) then
       begin
         CitsSeekToIV(Floor(P_Scan_Lines-i-1/ContadorIV), Floor(LineNr/ContadorIV), 0);
 
         if StopAction then // Si nos han pedido que paremos ponemos a cero los valores que faltan por adquirir.
         begin
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
             CitsTempFile[2].Write(zeroSingle, SizeOf(zeroSingle));
             CitsTempFile[3].Write(zeroSingle, SizeOf(zeroSingle));
@@ -824,13 +824,13 @@ begin
         end
         else
         begin
-          form4.Button1Click(nil); //Make IV con espectro
-          // Los datos adquiridos están en Form4.DataCurrent. Los guardamos donde toque
+          LinerForm.Button1Click(nil); //Make IV con espectro
+          // Los datos adquiridos están en LinerForm.DataCurrent. Los guardamos donde toque
           // en el orden que toque
-          for k := 0 to Form4.PointNumber-1 do
+          for k := 0 to LinerForm.PointNumber-1 do
           begin
-            CitsTempFile[2].Write(Form4.DataCurrent[0][k], SizeOf(Form4.DataCurrent[0][k]));
-            CitsTempFile[3].Write(Form4.DataCurrent[1][Form4.PointNumber-1-k], SizeOf(Form4.DataCurrent[1][Form4.PointNumber-1-k]));
+            CitsTempFile[2].Write(LinerForm.DataCurrent[0][k], SizeOf(LinerForm.DataCurrent[0][k]));
+            CitsTempFile[3].Write(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k], SizeOf(LinerForm.DataCurrent[1][LinerForm.PointNumber-1-k]));
           end;
         end;
         ContadorIV:=1;
@@ -851,7 +851,7 @@ begin
     end
     else
     begin
-      adcRead:=Form10.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
+      adcRead:=DataAdcquisitionForm.adc_take_all(P_Scan_Mean, AdcWriteRead, nil);
       if ReadTopo=True then
       begin
         //if (DigitalPID) then
@@ -868,7 +868,7 @@ begin
 
     QueryPerformanceCounter(C2); // Lectura del cronómetro
     TiempoMedio:=(C2-TiempoInicial)/(F*PuntosPonderados+1); // El +1 es para evitar dividir entre 0. No supondrá mucho error
-    if Form3.CheckBox3.Checked then Form3.Label6.Caption:=FloatToStr(RoundTo((PuntosTotales-PuntosMedidos)*TiempoMedio,-1));
+    if ScanningForm.CheckBox3.Checked then ScanningForm.Label6.Caption:=FloatToStr(RoundTo((PuntosTotales-PuntosMedidos)*TiempoMedio,-1));
 
     Application.ProcessMessages;
     i:=i+1;
@@ -882,7 +882,7 @@ begin
     end;
 
   // Se podría actualizar la gráfica de la curva sólo aquí, por eficiencia
-  // Form3.xyyGraph1.Update;
+  // ScanningForm.xyyGraph1.Update;
 
   contadorIV:=1;
 
@@ -890,12 +890,12 @@ begin
 
   if Saveit then
   begin
-    Form3.UpdateBitmaps(nil);
+    ScanningForm.UpdateBitmaps(nil);
   end;
 end;
 
 // filterOrder: 0 = No filter; 1 = Fit to line
-function TForm1.FilterImage(Image: TImageSingle; scanX: Boolean; numPoints, filterOrder: Integer) : HImg;
+function TScanForm.FilterImage(Image: TImageSingle; scanX: Boolean; numPoints, filterOrder: Integer) : HImg;
 var
   i, j: Integer;
   ord, slope: Single;
@@ -938,7 +938,7 @@ begin
   end;
 end;
 
-function TForm1.FitToLine(dataX, dataY: vector; numPoints: Integer; out slope, ord: Single) : Boolean;
+function TScanForm.FitToLine(dataX, dataY: vector; numPoints: Integer; out slope, ord: Single) : Boolean;
 var
   i: Integer;
   sx, sy, sxy, sx2, aux: Single;
@@ -971,7 +971,7 @@ begin
   Result := true;
 end;
 
-procedure TForm1.CreateCitsTempFiles();
+procedure TScanForm.CreateCitsTempFiles();
 var
   i: Integer;
   path: array [0..MAX_PATH] of Char;
@@ -987,7 +987,7 @@ begin
   end;
 end;
 
-procedure TForm1.DestroyCitsTempFiles();
+procedure TScanForm.DestroyCitsTempFiles();
 var
   i: Integer;
 begin
@@ -998,7 +998,7 @@ begin
   end
 end;
 
-procedure TForm1.CitsSeekToIV(row, column, point: Integer);
+procedure TScanForm.CitsSeekToIV(row, column, point: Integer);
 var
   i, pointsIV: Integer;
   position: Int64;
@@ -1006,7 +1006,7 @@ begin
   if ((row < 0) or (column < 0)) then
     exit;
 
-  pointsIV := Form4.PointNumber;
+  pointsIV := LinerForm.PointNumber;
   position := ((row*IV_Scan_Lines+column)*pointsIV+point)*sizeof(Single);
 
   for i := 0 to 3 do
@@ -1015,7 +1015,7 @@ begin
   end
 end;
 
-procedure TForm1.RedimCits(PointsXY, PointsIV: Integer);
+procedure TScanForm.RedimCits(PointsXY, PointsIV: Integer);
 var
   i: Integer;
 begin
@@ -1029,17 +1029,17 @@ begin
   end
 end;
 
-procedure TForm1.Button12Click(Sender: TObject);
+procedure TScanForm.Button12Click(Sender: TObject);
 begin
-Form4.Show;
+LinerForm.Show;
 end;
 
-procedure TForm1.Button11Click(Sender: TObject);
+procedure TScanForm.Button11Click(Sender: TObject);
 begin
-Form5.Show;
+TripForm.Show;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TScanForm.Button1Click(Sender: TObject);
 var
 i,p: Integer;
 j,k,total: Integer;
@@ -1060,10 +1060,10 @@ repeat
   TiempoInicial:=0;
   Step:=0;
 
-  h.xstart:=DacValX/32768*Form10.attenuator*AmpX*10*1e-9;
-  h.xend:=Round(DacValX+int(65535*P_Scan_Size))/32768*AmpX*Form10.attenuator*10*1e-9;
-  h.ystart:=DacValY/32768*Form10.attenuator*AmpX*10*1e-9;
-  h.yend:=Round(DacValY+int(65535*P_Scan_Size))/32768*AmpY*Form10.attenuator*10*1e-9;
+  h.xstart:=DacValX/32768*DataAdcquisitionForm.attenuator*AmpX*10*1e-9;
+  h.xend:=Round(DacValX+int(65535*P_Scan_Size))/32768*AmpX*DataAdcquisitionForm.attenuator*10*1e-9;
+  h.ystart:=DacValY/32768*DataAdcquisitionForm.attenuator*AmpX*10*1e-9;
+  h.yend:=Round(DacValY+int(65535*P_Scan_Size))/32768*AmpY*DataAdcquisitionForm.attenuator*10*1e-9;
   h.xn:=P_Scan_Lines;
   h.yn:=P_Scan_Lines;
 
@@ -1071,10 +1071,10 @@ repeat
 
   StopAction:=False;
   Button10.Enabled:=True;
-  if CheckBox2.Checked then form4.show;
-  Form3.Show;
-  Form3.FreeScans(nil);
-  TryStrToInt(Form3.SpinEdit1.Text, EraseLines);
+  if CheckBox2.Checked then LinerForm.show;
+  ScanningForm.Show;
+  ScanningForm.FreeScans(nil);
+  TryStrToInt(ScanningForm.SpinEdit1.Text, EraseLines);
 
   PaintLines:=Checkbox6.checked;
 
@@ -1112,15 +1112,15 @@ repeat
        while ((i<P_Scan_Lines) and (StopAction<>True)) do  //Bucle lento en Y
         begin
           p:=p+1;
-          TryStrToInt(Form3.SpinEdit1.Text, EraseLines);
+          TryStrToInt(ScanningForm.SpinEdit1.Text, EraseLines);
           DacValY_Local:=PrincY+Step*i;
           if (i<>0) then MoveDac(nil, YDAC, PrincY+Step*(i-1), DacValY_Local, P_Scan_Jump, nil);
           MakeLine(nil,PaintLines,i); //Save the line and send line number
 
           if (p>=EraseLines) then
             begin
-  //            Form3.xyyGraph1.Clear;
-              Form3.ClearChart();
+  //            ScanningForm.xyyGraph1.Clear;
+              ScanningForm.ClearChart();
               p:=0;
             end;
           i:=i+1;
@@ -1141,15 +1141,15 @@ repeat
        while ((i<P_Scan_Lines) and (StopAction<>True)) do  //Bucle lento en X
         begin
           p:=p+1;
-          TryStrToInt(Form3.SpinEdit1.Text, EraseLines);
+          TryStrToInt(ScanningForm.SpinEdit1.Text, EraseLines);
           DacvalX_Local:=PrincX+Step*i;
           if (i<>0) then MoveDac(nil, XDAC, PrincX+Step*(i-1), DacValX_Local, P_Scan_Jump, nil);
           MakeLine(nil,PaintLines,i); //Save the line and send line number
 
            if (p>=EraseLines) then
             begin
-  //            Form3.xyyGraph1.Clear;
-              Form3.ClearChart();
+  //            ScanningForm.xyyGraph1.Clear;
+              ScanningForm.ClearChart();
               p:=0;
             end;
           i:=i+1;
@@ -1168,40 +1168,40 @@ repeat
 
        bitmapPasteList[i].x := XOffset;
        bitmapPasteList[i].y := YOffset;
-       bitmapPasteList[i].sizeX := 2*P_Scan_Size*Form10.attenuator;
-       bitmapPasteList[i].sizeY := 2*P_Scan_Size*Form10.attenuator;
+       bitmapPasteList[i].sizeX := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
+       bitmapPasteList[i].sizeY := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
        bitmapPasteList[i].bitmap := TBitmap.Create;
        try
          with bitmapPasteList[i].bitmap do
          begin
-           Width := Form3.PaintBox1.Width;
-           Height := Form3.PaintBox1.Height;
+           Width := ScanningForm.PaintBox1.Width;
+           Height := ScanningForm.PaintBox1.Height;
            Dest := Rect(0, 0, Width, Height);
          end;
-         with Form3.PaintBox1 do
+         with ScanningForm.PaintBox1 do
            Source := Rect(0, 0, Width, Height);
-           bitmapPasteList[i].bitmap.Canvas.CopyRect(Dest, Form3.PaintBox1.Canvas, Source);
+           bitmapPasteList[i].bitmap.Canvas.CopyRect(Dest, ScanningForm.PaintBox1.Canvas, Source);
         finally
        end;
        Update(self);
      end;
 
 
-  Form3.Close;
+  ScanningForm.Close;
 
   if (checkbox1.checked) then Button8Click(nil);
-until not Form3.CheckBox1.Checked;
-//if (Form3.CheckBox1.Checked) then Button1Click(nil); // Ojo!!. Llamada recursiva sin condición de parada!! (bucle infinito). Cambiado por repeat ... until
+until not ScanningForm.CheckBox1.Checked;
+//if (ScanningForm.CheckBox1.Checked) then Button1Click(nil); // Ojo!!. Llamada recursiva sin condición de parada!! (bucle infinito). Cambiado por repeat ... until
 
-if (Form3.CheckBox2.Checked)then
+if (ScanningForm.CheckBox2.Checked)then
 begin
-  Form5.Button3Click(nil);
-  Form3.CheckBox2.Checked:=False;
+  TripForm.Button3Click(nil);
+  ScanningForm.CheckBox2.Checked:=False;
 end;
 end;
 
 // Nacho, agosto de 2017. Si se pasa un buffer válido, en lugar de enviar el dato lo añade al buffer
-procedure TForm1.MoveDac(Sender: TObject; DacNr, init, fin, jump : integer; BufferOut: PAnsiChar);
+procedure TScanForm.MoveDac(Sender: TObject; DacNr, init, fin, jump : integer; BufferOut: PAnsiChar);
 var
 j,StepNumr,StepSign: Integer;
 Go_jump: Integer;
@@ -1214,7 +1214,7 @@ begin
   while (j<jump+1) do
   begin
   Go_jump:=Round(init+j*interv);
-  Form10.dac_set(DacNr,Go_jump, BufferOut);
+  DataAdcquisitionForm.dac_set(DacNr,Go_jump, BufferOut);
   j:=j+1;
   Application.ProcessMessages;
   end;
@@ -1229,16 +1229,16 @@ begin
   while (j<StepNumr+1) do
   begin
   Go_jump:=Round(init+StepSign*j*jump);
-  Form10.dac_set(DacNr,Go_jump, BufferOut);
+  DataAdcquisitionForm.dac_set(DacNr,Go_jump, BufferOut);
   j:=j+1;
   Application.ProcessMessages;
   end;
   
-  Form10.dac_set(DacNr,fin, BufferOut);
+  DataAdcquisitionForm.dac_set(DacNr,fin, BufferOut);
   Application.ProcessMessages;
 end;
 
-procedure TForm1.SaveSTP(Sender: TObject; OneImg : HImg; Suffix: String; factorZ: double);
+procedure TScanForm.SaveSTP(Sender: TObject; OneImg : HImg; Suffix: String; factorZ: double);
 var
 MiFile,FileNumber : string;
 k,l: Integer;
@@ -1246,8 +1246,8 @@ DataWsxmtoPlotinFile: Array [0..512,0..512] of Double;
 DataLine: Array [0..512] of Double;
 
 begin
-  Form1.Button8.Enabled:=False; // se desactiva para que no se pueda grabar sobre el fichero abierto.
-  Form8.Button1.Click; // Rellena la cabecera de la imagen
+  ScanForm.Button8.Enabled:=False; // se desactiva para que no se pueda grabar sobre el fichero abierto.
+  HeaderImgForm.Button1.Click; // Rellena la cabecera de la imagen
 
   // Asume que las imágenes son cuadradas (mismo número de filas y columnas)
   // Reordeno los datos para salgan bien colocados en WSxM.
@@ -1259,14 +1259,14 @@ begin
     end;
   end;
 
-  if Form9.Label5.Caption='.\data' then Button3Click(nil); // default value for the path
-  MiFile:=Form9.Label5.Caption; //Here is directory
+  if FileForm.Label5.Caption='.\data' then Button3Click(nil); // default value for the path
+  MiFile:=FileForm.Label5.Caption; //Here is directory
 
   FileNumber := Format('%.3d', [SpinEdit1.Value]);
   MiFile:=MiFile+'\'+Edit1.Text+Suffix+FileNumber+'.stp';
 
   F:=TFileStream.Create(MiFile,fmCreate) ;
-  F.WriteBuffer(Form8.WSxMHeader[1], Length(Form8.WSxMHeader));
+  F.WriteBuffer(HeaderImgForm.WSxMHeader[1], Length(HeaderImgForm.WSxMHeader));
 
   for l:=0 to h.yn-1 do
   begin
@@ -1278,12 +1278,12 @@ begin
     Application.ProcessMessages;  // para que funcione el control mientras que graba. No comprendo bien por qué tarda tanto.
   end;
   F.Destroy;
-  Form1.Button8.Enabled:=True; // se activa para que no se pueda grabar sobre el fichero abierto.
+  ScanForm.Button8.Enabled:=True; // se activa para que no se pueda grabar sobre el fichero abierto.
 end;
 
 // Guarda las curvas IV en el formato General Spectroscopy Imaging de WSxM
 // Nacho Horcas, diciembre de 2017
-procedure TForm1.SaveCits(dataSet: Integer);
+procedure TScanForm.SaveCits(dataSet: Integer);
 var
   MiFile, FileNumber:string;
   strLine, strDirections : AnsiString;
@@ -1297,8 +1297,8 @@ begin
 {$IfDef VER150}
   DecimalSeparator := '.';
 {$EndIf}
-  if Form9.Label5.Caption='.\data' then Button3Click(nil); // default value for the path
-  MiFile:=Form9.Label5.Caption; //Here is directory
+  if FileForm.Label5.Caption='.\data' then Button3Click(nil); // default value for the path
+  MiFile:=FileForm.Label5.Caption; //Here is directory
 
   case dataSet of
     0:
@@ -1346,13 +1346,13 @@ begin
   strLine := MyFormat('    Set Point: %d %%', [FormPID.ScrollBar4.Position]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
-  strLine := MyFormat('    X Amplitude: %f nm', [abs(Form1.h.xend-Form1.h.xstart)*1e9*CalX]);
+  strLine := MyFormat('    X Amplitude: %f nm', [abs(ScanForm.h.xend-ScanForm.h.xstart)*1e9*CalX]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
   strLine := MyFormat('    X Offset: %f nm', [XOffset*10*AmpX*CalX]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
-  strLine := MyFormat('    Y Amplitude: %f nm', [abs(Form1.h.yend-Form1.h.ystart)*1e9*CalY]);
+  strLine := MyFormat('    Y Amplitude: %f nm', [abs(ScanForm.h.yend-ScanForm.h.ystart)*1e9*CalY]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
   strLine := MyFormat('    Y Offset: %f nm', [YOffset*10*AmpY*CalY]);
@@ -1364,13 +1364,13 @@ begin
   F.Write(''#13#10, 2+Length(''));
   F.Write('    Image Data Type: double'#13#10, 2+Length('    Image Data Type: double'));
 
-  strLine := MyFormat('    Number of columns: %d', [Form1.IV_Scan_Lines]);
+  strLine := MyFormat('    Number of columns: %d', [ScanForm.IV_Scan_Lines]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
-  strLine := MyFormat('    Number of points per ramp: %d', [Form4.PointNumber]);
+  strLine := MyFormat('    Number of points per ramp: %d', [LinerForm.PointNumber]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
-  strLine := MyFormat('    Number of rows: %d', [Form1.IV_Scan_Lines]);
+  strLine := MyFormat('    Number of rows: %d', [ScanForm.IV_Scan_Lines]);
   F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
 
   F.Write('    Spectroscopy Amplitude: 1 nA'#13#10, 2+Length('    Spectroscopy Amplitude: 1 nA')); // Lo importante es la unidad, no el valor
@@ -1390,12 +1390,12 @@ begin
   F.Write(''#13#10, 2+Length(''));
 
   // Guarda las tensiones de cada punto del IV
-  maxV := 10*Form4.Size_xAxis;
+  maxV := 10*LinerForm.Size_xAxis;
   minV := -maxV;
 
-  for i := 0 to Form4.PointNumber-1 do
+  for i := 0 to LinerForm.PointNumber-1 do
   begin
-    strLine := MyFormat('    Image %.3d: %.4f V', [i, minV+i*(maxV-minV)/(Form4.PointNumber-1)]);
+    strLine := MyFormat('    Image %.3d: %.4f V', [i, minV+i*(maxV-minV)/(LinerForm.PointNumber-1)]);
     F.Write(PAnsiChar(strLine+#13#10)^, 2+Length(strLine));
   end;
 
@@ -1408,9 +1408,9 @@ begin
 
   // Fin de escribir la cabecera. Guardamos los datos, primero la topografía y luego las curvas IV
   // Para pruebas, guardo datos inventados
-  for i := Form1.IV_Scan_Lines-1 downto 0 do
+  for i := ScanForm.IV_Scan_Lines-1 downto 0 do
   begin
-    for j := Form1.IV_Scan_Lines-1 downto 0 do
+    for j := ScanForm.IV_Scan_Lines-1 downto 0 do
     begin
       value := ImageTopo^[i,j];
       F.Write(value, size_double);
@@ -1422,11 +1422,11 @@ begin
 	//	for (int iRow = 0; iRow < iNumRows; iRow++)
 	//		for (int iCol = 0; iCol < iNumColumns; iCol++)
 
-  for i := 0 to Form4.PointNumber-1 do
+  for i := 0 to LinerForm.PointNumber-1 do
   begin
-    for j := Form1.IV_Scan_Lines-1 downto 0 do
+    for j := ScanForm.IV_Scan_Lines-1 downto 0 do
     begin
-      for k := Form1.IV_Scan_Lines-1 downto 0 do
+      for k := ScanForm.IV_Scan_Lines-1 downto 0 do
       begin
         CitsSeekToIV(j, k, i);
 //        value := DataCurrentCits[dataSet][j][k][i]*1e9; // Guardamos en nA
@@ -1440,12 +1440,12 @@ begin
   F.Destroy;
 end;
 
-procedure TForm1.Button5Click(Sender: TObject);
+procedure TScanForm.Button5Click(Sender: TObject);
 begin
-Form8.Show;
+HeaderImgForm.Show;
 end;
 
-procedure TForm1.Button8Click(Sender: TObject);
+procedure TScanForm.Button8Click(Sender: TObject);
 var
 OneImg: HImg;
 i,j:Integer;
@@ -1454,7 +1454,7 @@ factorZ: double; // Factor para convertir los datos de la matriz a sus unidades 
 begin
 if ReadTopo=True then
 begin
-  factorZ := 10.0*Form1.AmpTopo*Form1.CalTopo;
+  factorZ := 10.0*ScanForm.AmpTopo*ScanForm.CalTopo;
   for i:=0 to h.yn-1 do
   begin
    for j:=0 to h.yn-1 do
@@ -1462,8 +1462,8 @@ begin
      OneImg[i,j]:=Dat_Image_Forth[1,i,j];
    end;
   end;
-  Form8.RadioGroup1.ItemIndex:=0;
-  Form8.RadioGroup2.ItemIndex:=0;
+  HeaderImgForm.RadioGroup1.ItemIndex:=0;
+  HeaderImgForm.RadioGroup2.ItemIndex:=0;
   SaveSTP(nil,OneImg,'_ih_', factorZ);
 
   for i:=0 to h.yn-1 do
@@ -1473,14 +1473,14 @@ begin
      OneImg[i,j]:=Dat_Image_Back[1,i,j];
    end;
   end;
-  Form8.RadioGroup1.ItemIndex:=1;
-  Form8.RadioGroup2.ItemIndex:=0;
+  HeaderImgForm.RadioGroup1.ItemIndex:=1;
+  HeaderImgForm.RadioGroup2.ItemIndex:=0;
   SaveSTP(nil,OneImg,'_vh_', factorZ);
 end;
 
 if ReadCurrent=True then
 begin
-  factorZ := Form1.AmpI*1e9*Form1.MultI;
+  factorZ := ScanForm.AmpI*1e9*ScanForm.MultI;
   for i:=0 to h.yn-1 do
   begin
     for j:=0 to h.yn-1 do
@@ -1488,8 +1488,8 @@ begin
       OneImg[i,j]:=Dat_Image_Forth[2,i,j];
     end;
   end;
-  Form8.RadioGroup1.ItemIndex:=0;
-  Form8.RadioGroup2.ItemIndex:=1;
+  HeaderImgForm.RadioGroup1.ItemIndex:=0;
+  HeaderImgForm.RadioGroup2.ItemIndex:=1;
   SaveSTP(nil,OneImg,'_ic_', factorZ);
 
   for i:=0 to h.yn-1 do
@@ -1499,12 +1499,12 @@ begin
       OneImg[i,j]:=Dat_Image_Back[2,i,j];
     end;
   end;
-  Form8.RadioGroup1.ItemIndex:=1;
-  Form8.RadioGroup2.ItemIndex:=1;
+  HeaderImgForm.RadioGroup1.ItemIndex:=1;
+  HeaderImgForm.RadioGroup2.ItemIndex:=1;
   SaveSTP(nil,OneImg,'_vc_', factorZ);
 
 // Se usa la misma condición que controla si se hacen IVs y aparte, que se quieran guardar los datos en este formato
-if (CheckBox2.Checked) and (Form11.CheckBox1.Checked) and (Form11.chkSaveAsWSxM.Checked) then
+if (CheckBox2.Checked) and (Config_IVForm.CheckBox1.Checked) and (Config_IVForm.chkSaveAsWSxM.Checked) then
   for i := 0 to 3 do
     SaveCits(i);
 end;
@@ -1512,7 +1512,7 @@ end;
 SpinEdit1.Value:=SpinEdit1.Value+1;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TScanForm.Button3Click(Sender: TObject);
 var
   i,Long :Integer;
   S: String;
@@ -1526,52 +1526,52 @@ begin
     SetLength(S,Long-1);
     Edit1.Text:=S;
 
-    Form9.Label5.Caption:=ExtractFileDir(SaveDialog1.FileName);
-    Form4.Edit1.Text:=Edit1.Text;
-    Form4.SaveDialog1.FileName := ChangeFileExt(SaveDialog1.FileName, '');
-    //CreateDir(Form9.Label5.Caption+'\IV');
-    Form9.Label6.Caption:=Form9.Label5.Caption;
+    FileForm.Label5.Caption:=ExtractFileDir(SaveDialog1.FileName);
+    LinerForm.Edit1.Text:=Edit1.Text;
+    LinerForm.SaveDialog1.FileName := ChangeFileExt(SaveDialog1.FileName, '');
+    //CreateDir(FileForm.Label5.Caption+'\IV');
+    FileForm.Label6.Caption:=FileForm.Label5.Caption;
   end;
 end;
 
-procedure TForm1.CheckBox1Click(Sender: TObject);
+procedure TScanForm.CheckBox1Click(Sender: TObject);
 begin
 Button3Click(nil);
 end;
 
-procedure TForm1.Button6Click(Sender: TObject);
+procedure TScanForm.Button6Click(Sender: TObject);
 begin
-Form9.Show;
+FileForm.Show;
 end;
 
-procedure TForm1.Button13Click(Sender: TObject);
+procedure TScanForm.Button13Click(Sender: TObject);
 begin
 //take_initialize;
-Form10.InitDataAcq;
+DataAdcquisitionForm.InitDataAcq;
 end;
 
-procedure TForm1.Button14Click(Sender: TObject);
+procedure TScanForm.Button14Click(Sender: TObject);
 
 begin
 FormPID.Show;
 end;
 
-procedure TForm1.ScrollBar1Change(Sender: TObject);
+procedure TScanForm.ScrollBar1Change(Sender: TObject);
 var
 dac_num, enviaDac:SmallInt;
 
 begin
 dac_num:=SpinEdit2.Value;
 enviaDac:=ScrollBar1.Position;
-Form10.dac_set(dac_num,enviaDac, nil);
+DataAdcquisitionForm.dac_set(dac_num,enviaDac, nil);
 end;
 
-procedure TForm1.Button16Click(Sender: TObject);
+procedure TScanForm.Button16Click(Sender: TObject);
 begin
-Form10.Show;
+DataAdcquisitionForm.Show;
 end;
 
-procedure TForm1.ResizeBitmap(Bitmap: TBitmap; Width, Height: Integer; Background: TColor);
+procedure TScanForm.ResizeBitmap(Bitmap: TBitmap; Width, Height: Integer; Background: TColor);
 var
   R: TRect;
   B: TBitmap;
@@ -1610,7 +1610,7 @@ begin
   end;
 end;
 
-procedure TForm1.Button7Click(Sender: TObject);
+procedure TScanForm.Button7Click(Sender: TObject);
 var
   i:Integer;
   Mensaje:Integer;
@@ -1635,19 +1635,19 @@ end;
 
 
 
-procedure TForm1.CheckBox2Click(Sender: TObject);
+procedure TScanForm.CheckBox2Click(Sender: TObject);
 begin
 if Checkbox2.Checked then
   begin
-    Form2.Checkbox4.Checked:=True;
+    ConfigForm.Checkbox4.Checked:=True;
   end
 else
   begin
-    Form2.Checkbox4.Checked:=False;
+    ConfigForm.Checkbox4.Checked:=False;
   end;
 end;
 
-function TForm1.PointGlobalToCanvas(pntGlobal: TPointFloat; canvasSize: Integer):TPoint;
+function TScanForm.PointGlobalToCanvas(pntGlobal: TPointFloat; canvasSize: Integer):TPoint;
 var
   zoomFactor, scrollX, scrollY, tempX, tempY, halfScollRange: Double;
 begin
@@ -1677,7 +1677,7 @@ begin
   Result.Y := Round(tempY);
 end;
 
-function TForm1.StringToLengthNm(strValue: AnsiString):Single;
+function TScanForm.StringToLengthNm(strValue: AnsiString):Single;
 var
   strNumber, strUnit: AnsiString;
   value: Single;
@@ -1711,7 +1711,7 @@ begin
 
 end;
 
-function TForm1.PointCanvasToGlobal(pntCanvas: TPoint; canvasSize: Integer):TPointFloat;
+function TScanForm.PointCanvasToGlobal(pntCanvas: TPoint; canvasSize: Integer):TPointFloat;
 var
   zoomFactor, scrollX, scrollY, tempX, tempY, halfScollRange: Double;
 begin
@@ -1740,7 +1740,7 @@ begin
   Result.Y := tempY;
 end;
 
-procedure TForm1.Update(Sender:TObject);
+procedure TScanForm.Update(Sender:TObject);
 var
   i:Integer;
   bottomLeft, topRight: TPoint;
@@ -1748,7 +1748,7 @@ var
 begin
 
 //  Pinta el fondo
-  with Form1.PaintBox1.Canvas do
+  with ScanForm.PaintBox1.Canvas do
   begin
     Pen.Color   := $808080;
     Brush.Color := Pen.Color;
@@ -1756,7 +1756,7 @@ begin
 
     // Pinto el fondo de gris. Luego lo taparé con el área de barrido permitida por los piezos
     // Si todo está bien hecho, este fondo gris no se debería ver nunca
-    FillRect(Rect(0,0,Form1.PaintBox1.Width,Form1.PaintBox1.Height));
+    FillRect(Rect(0,0,ScanForm.PaintBox1.Width,ScanForm.PaintBox1.Height));
 
     Pen.Color:= clred;//clred;
     Brush.Color:=0;
@@ -1820,16 +1820,16 @@ begin
 
 
   //Cuadrado de posición de la punta
-  with Form1.PaintBox1.Canvas do
+  with ScanForm.PaintBox1.Canvas do
   begin
     Pen.Color:= $FFFF00;
     Brush.Style:=bsClear;
 
     // Dibujo el recuadro que indica el área de barrido seleccionada
-    bottomLeftFloat.X := XOffset-P_Scan_Size*Form10.attenuator;
-    bottomLeftFloat.Y := YOffset-P_Scan_Size*Form10.attenuator;
-    topRightFloat.X   := XOffset+P_Scan_Size*Form10.attenuator;
-    topRightFloat.Y   := YOffset+P_Scan_Size*Form10.attenuator;
+    bottomLeftFloat.X := XOffset-P_Scan_Size*DataAdcquisitionForm.attenuator;
+    bottomLeftFloat.Y := YOffset-P_Scan_Size*DataAdcquisitionForm.attenuator;
+    topRightFloat.X   := XOffset+P_Scan_Size*DataAdcquisitionForm.attenuator;
+    topRightFloat.Y   := YOffset+P_Scan_Size*DataAdcquisitionForm.attenuator;
     bottomLeft := PointGlobalToCanvas(bottomLeftFloat, SizeOfWindow);
     topRight := PointGlobalToCanvas(topRightFloat, SizeOfWindow);
     Rectangle(Rect(bottomLeft, topRight));
@@ -1843,7 +1843,7 @@ begin
   end;
 end;
 
-procedure TForm1.Button17Click(Sender: TObject);
+procedure TScanForm.Button17Click(Sender: TObject);
 var
   bmp: TBitmap;
   uiClipboardID, hData: Cardinal;
@@ -1860,8 +1860,8 @@ begin
   szFileName := '';
 
   // Valores por defecto para el pegado
-  sizeX := 2*10*P_Scan_Size*AmpX*Form10.attenuator*CalX; // Rango del DAC en V * ganancia del amplificador * Calibracion en nm/V
-  sizeY := 2*10*P_Scan_Size*AmpY*Form10.attenuator*CalY;
+  sizeX := 2*10*P_Scan_Size*AmpX*DataAdcquisitionForm.attenuator*CalX; // Rango del DAC en V * ganancia del amplificador * Calibracion en nm/V
+  sizeY := 2*10*P_Scan_Size*AmpY*DataAdcquisitionForm.attenuator*CalY;
   x := XOffset*10*AmpX*CalX;
   y := YOffset*10*AmpY*CalY;
   numParamsRead := 0;
@@ -2041,22 +2041,22 @@ begin
   end;
 end;
 
-procedure TForm1.Button18Click(Sender: TObject);
+procedure TScanForm.Button18Click(Sender: TObject);
 begin
-Form11.show;
+Config_IVForm.show;
 end;
 
-procedure TForm1.ScrollBar2Change(Sender: TObject);
-begin
-  Update(nil)
-end;
-
-procedure TForm1.ScrollBar3Change(Sender: TObject);
+procedure TScanForm.ScrollBar2Change(Sender: TObject);
 begin
   Update(nil)
 end;
 
-procedure TForm1.btnMarkNowClick(Sender: TObject);
+procedure TScanForm.ScrollBar3Change(Sender: TObject);
+begin
+  Update(nil)
+end;
+
+procedure TScanForm.btnMarkNowClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -2067,8 +2067,8 @@ begin
 
   bitmapPasteList[i].x := XOffset;
   bitmapPasteList[i].y := YOffset;
-  bitmapPasteList[i].sizeX := 2*P_Scan_Size*Form10.attenuator;
-  bitmapPasteList[i].sizeY := 2*P_Scan_Size*Form10.attenuator;
+  bitmapPasteList[i].sizeX := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
+  bitmapPasteList[i].sizeY := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
 
   // En el caso de mark now no habrá bitmap, sólo un recuadro
   bitmapPasteList[i].bitmap := nil;
@@ -2083,14 +2083,14 @@ begin
   Update(self);
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TScanForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   DestroyCitsTempFiles();
 end;
 
-// Cálculos extraidos de TForm1.PointCanvasToGlobal, igualando el punto del canvas
+// Cálculos extraidos de TScanForm.PointCanvasToGlobal, igualando el punto del canvas
 // a cero (una vez normalizado entre +/-1) y despejando scrollX o scrollY
-procedure TForm1.btnCenterAtTipClick(Sender: TObject);
+procedure TScanForm.btnCenterAtTipClick(Sender: TObject);
 var
   zoomFactor, scrollX, scrollY, halfScollRange: Double;
 begin
@@ -2116,7 +2116,7 @@ begin
   Update(nil);
 end;
 
-procedure TForm1.Button15Click(Sender: TObject);
+procedure TScanForm.Button15Click(Sender: TObject);
 
  var
   i: Integer;
@@ -2128,8 +2128,8 @@ begin
 
   bitmapPasteList2[i].x := XOffset;
   bitmapPasteList2[i].y := YOffset;
-  bitmapPasteList2[i].sizeX := 2*P_Scan_Size*Form10.attenuator;
-  bitmapPasteList2[i].sizeY := 2*P_Scan_Size*Form10.attenuator;
+  bitmapPasteList2[i].sizeX := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
+  bitmapPasteList2[i].sizeY := 2*P_Scan_Size*DataAdcquisitionForm.attenuator;
 
   // En el caso de mark now no habrá bitmap, sólo un recuadro
   bitmapPasteList2[i].bitmap := nil;
@@ -2144,7 +2144,7 @@ begin
   Update(self);
 end;
 
-//procedure TForm1.SpinEdit3Change(Sender: TObject);
+//procedure TScanForm.SpinEdit3Change(Sender: TObject);
 //begin
 //SleepDo := StrtoInt(SpinEdit3.Text);
 //end;

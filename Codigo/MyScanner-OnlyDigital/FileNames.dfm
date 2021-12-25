@@ -1,9 +1,9 @@
-object Form9: TForm9
+object FileForm: TFileForm
   Left = 715
   Top = 659
-  Width = 781
-  Height = 164
-  Caption = 'Files Directories'
+  Caption = 'File Directories'
+  ClientHeight = 125
+  ClientWidth = 765
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

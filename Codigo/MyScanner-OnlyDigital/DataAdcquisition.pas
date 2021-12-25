@@ -47,7 +47,7 @@ type
   TMatrixInt = array of array of Integer;
   TVectorDouble = array of Double;
 
-  TForm10 = class(TForm)
+  TDataAdcquisitionForm = class(TForm)
     Button1: TButton;
     Label1: TLabel;
     Label2: TLabel;
@@ -76,7 +76,7 @@ type
     function ramp_take(ndac, value1, value2, dataSet, npoints, jump, delay: Integer; blockAcq: Boolean): boolean;
     function send_buffer(bufferToSend: PAnsiChar; bytesToSend: Integer): FTC_STATUS;
     procedure set_dio_port(value: Word);
-    // para las electrónicas con atenuador. Si Form1.VersionDivider=False, entonces es todo como
+    // para las electrónicas con atenuador. Si ScanForm.VersionDivider=False, entonces es todo como
     // cuando no hay atenuador. Si no, es que hay atenuador.
     procedure set_attenuator(DACAttNr: Integer; value: double);
     //procedure set_attenuator(value: Double);
@@ -96,7 +96,7 @@ type
   end;
 
 var
-  Form10: TForm10;
+  DataAdcquisitionForm: TDataAdcquisitionForm;
   SupraSPI_Hdl:Dword;
   simulating: Boolean;
   simulatedDac: array[0..7] of Integer;
@@ -158,7 +158,7 @@ begin
    Result:= FT_GetQueueStatus(SupraSPI_Hdl, @ReceivesBytes);
 End;
 
-Function TForm10.InitDataAcq : boolean  ;
+Function TDataAdcquisitionForm.InitDataAcq : boolean  ;
 
  var LocationID:Integer;
  var SPI_Ret:Integer;    SPI_Hdl:Dword;
@@ -262,7 +262,7 @@ begin
   // Escritura de valor máximo en el atenuador por posibles problemas tras reset (va a la mitad del FS)
   // El valor máximo significa que no atenua.
   // Se tiene en cuenta la versión de la electrónica
-  if Form1.Versiondivider=False then set_attenuator(0,1)
+  if ScanForm.Versiondivider=False then set_attenuator(0,1)
   else
     begin
      set_attenuator(1,1);
@@ -304,7 +304,7 @@ end  ;
  //////////////// FUNCIÓN DAC_SET
  // Devuelve el número de caracteres que ocupa la cadena que envía por USB o
  // -1 en caso de error (donde se controle)
-function TForm10.dac_set(ndac, valor:integer; BufferOut: PAnsiChar) : Integer ;
+function TDataAdcquisitionForm.dac_set(ndac, valor:integer; BufferOut: PAnsiChar) : Integer ;
 Var sTexto:AnsiString;
 Var sTexto2:AnsiString;
 var CadenaCS:integer;
@@ -396,7 +396,7 @@ if TRAZAS then MessageDlg('DAC Set numero de dac:'+Stexto+ 'valor:'+sTexto2, mtE
 end  ;
 
 ////////////  FUNCIÓN ADC_take    ///////////
-function TForm10.adc_take(chn,mux,n:integer) : double ;
+function TDataAdcquisitionForm.adc_take(chn,mux,n:integer) : double ;
 
 
 Var sTexto:String;
@@ -463,7 +463,7 @@ if (n<1) or (chn<0) or (chn>5)  then Exit ;
   Until (ReceivesBytes >= BytesToReceive) Or (SPI_Ret <> FT_OK)  ;
 
   If SPI_Ret <> 0 then
-    if not simulating then MessageDlg(Format('TForm10.adc_take. Error al leer (%d)', [SPI_Ret]), mtError, [mbOk], 0);
+    if not simulating then MessageDlg(Format('TDataAdcquisitionForm.adc_take. Error al leer (%d)', [SPI_Ret]), mtError, [mbOk], 0);
 
   BytesReturned:=0;
 
@@ -515,7 +515,7 @@ end;
 // Si sólo se le pide que construya la cadena que pide los datos, pero no que los
 // lea, devuelve el número de caracteres de la cadena en el primer valor del vector
 // devuelto.
-function TForm10.adc_take_all(n:Integer; action: AdcTakeAction; BufferOut: PAnsiChar) : TVectorDouble ;
+function TDataAdcquisitionForm.adc_take_all(n:Integer; action: AdcTakeAction; BufferOut: PAnsiChar) : TVectorDouble ;
 
 
 Var sTexto:String;
@@ -620,7 +620,7 @@ begin
       Until (ReceivesBytes >= BytesToReceive) Or (SPI_Ret <> FT_OK) or (intentos > 10000);
 
       If SPI_Ret <> FT_OK then
-        if not simulating then MessageDlg(Format('TForm10.adc_take_all. Error al leer (%d)', [SPI_Ret]), mtError, [mbOk], 0);
+        if not simulating then MessageDlg(Format('TDataAdcquisitionForm.adc_take_all. Error al leer (%d)', [SPI_Ret]), mtError, [mbOk], 0);
 
       if (ReceivesBytes < BytesToReceive) then // No nos han llegado los datos en un tiempo prudencial. Intentamos salvar los muebles
       begin
@@ -657,7 +657,7 @@ begin
         numres := ord(FT_In_Buffer[(j*2)])*256 +  ( ord(FT_In_Buffer[(j*2+1)]));
         if  numres > 32767             then    numres:=numres - 65536;      //Conversión (condicional) a nºs negativos
         resultadoooo:=numres/32768;
-        if simulating then resultadoooo := simulatedDac[Form1.XDAC]/$8000+Random/100;
+        if simulating then resultadoooo := simulatedDac[ScanForm.XDAC]/$8000+Random/100;
         datosum[j] := datosum[j] + resultadoooo ;
       end;
     end;
@@ -700,7 +700,7 @@ end;
 //  delay:    Tiempo de espera (en unidades arbitrarias) desde que se da la salida del DAC hasta que se leen los ADCs. (Sin implementar)
 //  blockAcq: Indica si se dede adquirir toda la rampa como un bloque (tarda menos) o punto a punto (usa menos buffer de comunicación).
 
-function TForm10.ramp_take(ndac, value1, value2, dataSet, npoints, jump, delay: Integer; blockAcq: Boolean): boolean;
+function TDataAdcquisitionForm.ramp_take(ndac, value1, value2, dataSet, npoints, jump, delay: Integer; blockAcq: Boolean): boolean;
 var
 i,j,Loc_ADCTopo,Loc_ADCI, Loc_ADCOther: Integer;
 Loc_CalTopo,Loc_AmpTopo,Loc_AmpI,Loc_MultI,Loc_AmpOther,Loc_MultOther,Step,DacVal: Double;
@@ -720,30 +720,30 @@ begin
   Step:=(value2-value1)/(npoints*jump-1);
 
   //Cogemos variables de la config del scanner
-  Loc_CalTopo:=Form1.CalTopo;
-  Loc_AmpTopo:=Form1.AmpTopo;
-  Loc_ADCTopo:=Form1.ADCTopo;
+  Loc_CalTopo:=ScanForm.CalTopo;
+  Loc_AmpTopo:=ScanForm.AmpTopo;
+  Loc_ADCTopo:=ScanForm.ADCTopo;
 
-  Loc_AmpI:=Form1.AmpI;
-  Loc_MultI:=Form1.MultI;
-  Loc_ADCI:=Form1.ADCI;
+  Loc_AmpI:=ScanForm.AmpI;
+  Loc_MultI:=ScanForm.MultI;
+  Loc_ADCI:=ScanForm.ADCI;
 
-  Loc_AmpOther:=Form1.AmpOther;
-  Loc_MultOther:=Form1.MultOther;
-  Loc_ADCOther:=Form1.ADCOther;
+  Loc_AmpOther:=ScanForm.AmpOther;
+  Loc_MultOther:=ScanForm.MultOther;
+  Loc_ADCOther:=ScanForm.ADCOther;
 
   // Lectura de UNA rampa de ida o vuelta
   BufferPtr := Addr(BufferMem[0]);
   i:=0;
-  while (Form4.Abort_Measure=False) and (i<npoints) do
+  while (LinerForm.Abort_Measure=False) and (i<npoints) do
   begin
     j := 0;
-    if not Form4.ReadXFromADC then
-      Form4.DataX[dataSet,i]:=DacVal*Strtofloat(Form7.Edit1.Text)/32768;
+    if not LinerForm.ReadXFromADC then
+      LinerForm.DataX[dataSet,i]:=DacVal*Strtofloat(ConfigLinerForm.Edit1.Text)/32768;
 
     while (j < jump) do
     begin
-      BufferPtr := BufferPtr + Form10.dac_set(Form4.x_axisDAC, Round(DacVal), BufferPtr);
+      BufferPtr := BufferPtr + DataAdcquisitionForm.dac_set(LinerForm.x_axisDAC, Round(DacVal), BufferPtr);
       DacVal := DacVal+Step;
       Inc(j);
       if blockAcq then
@@ -752,14 +752,14 @@ begin
 
     if (blockAcq) then // Si la adquisición es por bloques, metemos también la lectura del ADC. Si es punto a punto mejor esperar a que dé la salida.
     begin
-      adcRead := Form10.adc_take_all(Form4.LinerMean, AdcWriteCommand, BufferPtr);
+      adcRead := DataAdcquisitionForm.adc_take_all(LinerForm.LinerMean, AdcWriteCommand, BufferPtr);
       BufferPtr := BufferPtr + Round(adcRead[0]);
     end;
 
     // Si se llena el buffer, lo enviamos y empezamos de nuevo desde el principio
     if ((BufferPtr-Addr(BufferMem[0])) > safeBufferSize) then
     begin
-      Form10.send_buffer(Addr(BufferMem[0]), BufferPtr-Addr(BufferMem[0]));
+      DataAdcquisitionForm.send_buffer(Addr(BufferMem[0]), BufferPtr-Addr(BufferMem[0]));
       BufferPtr := Addr(BufferMem[0]);
     end;
 
@@ -769,26 +769,26 @@ begin
     // suponer que no hay prisa, podemos tardar un poco más en cada punto.
     if (not blockAcq) then
     begin
-      adcRead:=Form10.adc_take_all(Form4.LinerMean, AdcWriteRead, nil);
-      if Form4.ReadXFromADC then
-        Form4.DataX[dataSet,i]:=adcRead[Form4.x_axisADC]*Form4.x_axisMult;
+      adcRead:=DataAdcquisitionForm.adc_take_all(LinerForm.LinerMean, AdcWriteRead, nil);
+      if LinerForm.ReadXFromADC then
+        LinerForm.DataX[dataSet,i]:=adcRead[LinerForm.x_axisADC]*LinerForm.x_axisMult;
 
-      if Form4.ReadZ then
+      if LinerForm.ReadZ then
       begin
-        //if (Form1.DigitalPID) then
-        //  Form4.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*Action_PID/32768
+        //if (ScanForm.DigitalPID) then
+        //  LinerForm.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*Action_PID/32768
         //else
-          Form4.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*adcRead[Loc_ADCTopo];
+          LinerForm.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*adcRead[Loc_ADCTopo];
       end;
 
       //Hemos cambiado Loc_ADCI por x_axisADC en el primer parámetro de adc_take para que el canal de ADC sea el de config liner
       //Se vuelve a poner Loc_ADCI
-      if Form4.ReadCurrent then
-        Form4.DataCurrent[dataSet,i]:=Loc_AmpI*Loc_MultI*adcRead[Loc_ADCI];
+      if LinerForm.ReadCurrent then
+        LinerForm.DataCurrent[dataSet,i]:=Loc_AmpI*Loc_MultI*adcRead[Loc_ADCI];
 
       //Hermann, 19/11/2021. se añade una lectura de un ADC adicional
-        if Form4.ReadOther then
-        Form4.DataOther[dataSet,i]:=Loc_AmpOther*Loc_MultOther*adcRead[Loc_ADCOther];
+        if LinerForm.ReadOther then
+        LinerForm.DataOther[dataSet,i]:=Loc_AmpOther*Loc_MultOther*adcRead[Loc_ADCOther];
 
     end;
 
@@ -804,11 +804,11 @@ begin
 
   // Tenemos un ciclo de latencia, por lo que envío un dato más, para luego
   // despreciar el primero.
-  adcRead := Form10.adc_take_all(1, AdcWriteCommand, BufferPtr);
+  adcRead := DataAdcquisitionForm.adc_take_all(1, AdcWriteCommand, BufferPtr);
   BufferPtr := BufferPtr + Round(adcRead[0]);
 
   // Envía todos los datos del buffer
-  Form10.send_buffer(Addr(BufferMem[0]), BufferPtr-Addr(BufferMem[0]));
+  DataAdcquisitionForm.send_buffer(Addr(BufferMem[0]), BufferPtr-Addr(BufferMem[0]));
 
   // Recibe los datos de los ADCs
   // La variable i tendrá el número de puntos que realmente ha pedido. Si se ha
@@ -817,33 +817,33 @@ begin
   // sacamos de los buffers todo lo que hemos pedido.
 
   // Sacamos el dato extra que hemos metido para compensar la latencia.
-  Form10.adc_take_all(1, AdcReadData, nil);
+  DataAdcquisitionForm.adc_take_all(1, AdcReadData, nil);
 
   j := i;
   i:=0;
   while (i < j) do
   begin
-    adcRead:=Form10.adc_take_all(Form4.LinerMean, AdcReadData, nil);
-    if Form4.ReadXFromADC then
-      Form4.DataX[dataSet,i]:=adcRead[Form4.x_axisADC]*Form4.x_axisMult;
+    adcRead:=DataAdcquisitionForm.adc_take_all(LinerForm.LinerMean, AdcReadData, nil);
+    if LinerForm.ReadXFromADC then
+      LinerForm.DataX[dataSet,i]:=adcRead[LinerForm.x_axisADC]*LinerForm.x_axisMult;
 
-    if Form4.ReadZ then
+    if LinerForm.ReadZ then
     begin
-      //if (Form1.DigitalPID) then
-      //  Form4.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*Action_PID/32768
+      //if (ScanForm.DigitalPID) then
+      //  LinerForm.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*Action_PID/32768
       //else
-        Form4.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*adcRead[Loc_ADCTopo];
+        LinerForm.DataZ[dataSet,i]:=Loc_CalTopo*Loc_AmpTopo*adcRead[Loc_ADCTopo];
     end;
 
     //Hemos cambiado Loc_ADCI por x_axisADC en el primer parámetro de adc_take para que el canal de ADC sea el de config liner
     // Volver a poner Loc_ADCI
-    if Form4.ReadCurrent then
-      Form4.DataCurrent[dataSet,i]:=Loc_AmpI*Loc_MultI*adcRead[Loc_ADCI];
+    if LinerForm.ReadCurrent then
+      LinerForm.DataCurrent[dataSet,i]:=Loc_AmpI*Loc_MultI*adcRead[Loc_ADCI];
 
     //Hemos cambiado Loc_ADCI por x_axisADC en el primer parámetro de adc_take para que el canal de ADC sea el de config liner
     // Volver a poner Loc_ADCI
-    if Form4.ReadOther then
-      Form4.DataOther[dataSet,i]:=Loc_AmpOther*Loc_MultOther*adcRead[Loc_ADCOther];
+    if LinerForm.ReadOther then
+      LinerForm.DataOther[dataSet,i]:=Loc_AmpOther*Loc_MultOther*adcRead[Loc_ADCOther];
 
     i:=i+1;
   end;
@@ -851,7 +851,7 @@ begin
   Result := True;
 end;
 
-function TForm10.send_buffer(bufferToSend: PAnsiChar; bytesToSend: Integer):FTC_STATUS;
+function TDataAdcquisitionForm.send_buffer(bufferToSend: PAnsiChar; bytesToSend: Integer):FTC_STATUS;
 var
 BytesWritten: Integer;
 SPI_Ret: Integer;
@@ -876,7 +876,7 @@ begin
    Result := SPI_Ret;
 end;
 
-procedure TForm10.set_dio_port(value: Word);
+procedure TDataAdcquisitionForm.set_dio_port(value: Word);
 var
   BufferDest: PAnsiChar;
   i: Integer;
@@ -910,7 +910,7 @@ begin
      if not simulating then MessageDlg('error al escribir el puerto digital', mtError, [mbOk], 0);
 end;
 
-procedure TForm10.set_attenuator(DACAttNr: Integer; value: double);
+procedure TDataAdcquisitionForm.set_attenuator(DACAttNr: Integer; value: double);
 var
   BufferDest: PAnsiChar;
   i: Integer;
@@ -933,7 +933,7 @@ begin
   (BufferDest+i)^ := AnsiChar(MPSSE_CmdWriteDO2); Inc(i);
   (BufferDest+i)^ := AnsiChar(2); Inc(i); // Número de bytes a transmitir menos 1
   (BufferDest+i)^ := AnsiChar(0); Inc(i);
-  if Form1.VersionDivider=False then
+  if ScanForm.VersionDivider=False then
   begin
     (BufferDest+i)^ := AnsiChar(03);
     Inc(i); // Registro: Ambos DACs
@@ -962,12 +962,12 @@ end;
 
 
 //Esta se quedA
-procedure TForm10.Button1Click(Sender: TObject);
+procedure TDataAdcquisitionForm.Button1Click(Sender: TObject);
 begin
 InitDataAcq;
 end;
 //Esta se quedA
-procedure TForm10.ScrollBar1Change(Sender: TObject);
+procedure TDataAdcquisitionForm.ScrollBar1Change(Sender: TObject);
 var
 numdac:SmallInt;
 Value:SmallInt;
@@ -979,14 +979,14 @@ dac_set(numdac,Value, nil);
 Label5.Caption:= FloatToStrF(10*Value/32768,ffGeneral,4,4);
 end;
 //Esta se quedA
-procedure TForm10.FormCreate(Sender: TObject);
+procedure TDataAdcquisitionForm.FormCreate(Sender: TObject);
 begin
 InitDataAcq;
 end;
 
 
 //Esta se quedA
-procedure TForm10.Button2Click(Sender: TObject);
+procedure TDataAdcquisitionForm.Button2Click(Sender: TObject);
 var
 mux,n: SmallInt;
 
@@ -996,13 +996,13 @@ n:=SpinEdit3.Value;
 Label3.Caption:=FloattoStr(adc_take(mux,mux,n));
 end;
 
-procedure TForm10.Button3Click(Sender: TObject);
+procedure TDataAdcquisitionForm.Button3Click(Sender: TObject);
 begin
 ScrollBar1.Position:=0;
 ScrollBar1Change(nil);
 end;
 
-procedure TForm10.Button4Click(Sender: TObject);
+procedure TDataAdcquisitionForm.Button4Click(Sender: TObject);
 var
   myFile : TextFile;
   //text   : AnsiString;
@@ -1062,14 +1062,14 @@ begin
   Label8.Caption:=IntToStr(StrToInt(Label8.Caption)+1);
 end;
 
-procedure TForm10.Button5Click(Sender: TObject);
+procedure TDataAdcquisitionForm.Button5Click(Sender: TObject);
 begin
 StopAction:=True;
 Label7.Font.Color :=clRed;
 Label7.Caption :='Not saving';
 end;
 
-procedure TForm10.Edit1Change(Sender: TObject);
+procedure TDataAdcquisitionForm.Edit1Change(Sender: TObject);
 begin
 Label8.Caption:='1';
 end;

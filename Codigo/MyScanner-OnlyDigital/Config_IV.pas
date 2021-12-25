@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls;
 
 type
-  TForm11 = class(TForm)
+  TConfig_IVForm = class(TForm)
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     ComboBox1: TComboBox;
@@ -21,7 +21,7 @@ type
   end;
 
 var
-  Form11: TForm11;
+  Config_IVForm: TConfig_IVForm;
 
 implementation
 
@@ -29,10 +29,10 @@ uses Scanner1, Liner;
 
 {$R *.dfm}
 
-procedure TForm11.ComboBox1Change(Sender: TObject);
+procedure TConfig_IVForm.ComboBox1Change(Sender: TObject);
 begin
-Form1.IV_Scan_Lines:=StrtoInt(ComboBox1.Text);
-Form1.RedimCits(Form1.IV_Scan_Lines, Form4.PointNumber);
+ScanForm.IV_Scan_Lines:=StrtoInt(ComboBox1.Text);
+ScanForm.RedimCits(ScanForm.IV_Scan_Lines, LinerForm.PointNumber);
 end;
 
 end.

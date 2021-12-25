@@ -7,7 +7,7 @@ uses
   StdCtrls;
 
 type
-  TForm9 = class(TForm)
+  TFileForm = class(TForm)
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -23,7 +23,7 @@ type
   end;
 
 var
-  Form9: TForm9;
+  FileForm: TFileForm;
 
 implementation
 

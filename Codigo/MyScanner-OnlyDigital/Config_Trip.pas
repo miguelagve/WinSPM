@@ -7,7 +7,7 @@ uses
   StdCtrls, Spin, ExtCtrls;
 
 type
-  TForm6 = class(TForm)
+  TConfigTripForm = class(TForm)
     Panel1: TPanel;
     Label1: TLabel;
     Label2: TLabel;
@@ -28,7 +28,7 @@ type
   end;
 
 var
-  Form6: TForm6;
+  ConfigTripForm: TConfigTripForm;
 
 implementation
 
@@ -36,24 +36,24 @@ uses Trip;
 
 {$R *.DFM}
 
-procedure TForm6.SpinEdit1Change(Sender: TObject);
+procedure TConfigTripForm.SpinEdit1Change(Sender: TObject);
 begin
-  TryStrToInt(SpinEdit1.Text, Form5.ZPDac);
+  TryStrToInt(SpinEdit1.Text, TripForm.ZPDac);
 end;
 
-procedure TForm6.SpinEdit2Change(Sender: TObject);
+procedure TConfigTripForm.SpinEdit2Change(Sender: TObject);
 begin
-  TryStrToInt(SpinEdit2.Text, Form5.IADC);
+  TryStrToInt(SpinEdit2.Text, TripForm.IADC);
 end;
 
-procedure TForm6.CheckBox1Click(Sender: TObject);
+procedure TConfigTripForm.CheckBox1Click(Sender: TObject);
 begin
-if (Checkbox1.checked) then Form5.Mult:=1 else Form5.Mult:=-1;
+if (Checkbox1.checked) then TripForm.Mult:=1 else TripForm.Mult:=-1;
 end;
 
-procedure TForm6.CheckBox2Click(Sender: TObject);
+procedure TConfigTripForm.CheckBox2Click(Sender: TObject);
 begin
-if (Checkbox2.checked) then Form5.MultI:=1 else Form5.MultI:=-1;
+if (Checkbox2.checked) then TripForm.MultI:=1 else TripForm.MultI:=-1;
 end;
 
 end.

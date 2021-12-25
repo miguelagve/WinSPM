@@ -1,9 +1,9 @@
-object Form5: TForm5
+object TripForm: TTripForm
   Left = 57
   Top = 673
-  Width = 350
-  Height = 214
   Caption = 'Coarse Aproach'
+  ClientHeight = 175
+  ClientWidth = 334
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

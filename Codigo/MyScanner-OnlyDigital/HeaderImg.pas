@@ -7,7 +7,7 @@ uses
   StdCtrls, ExtCtrls, ComCtrls, var_gbl;
 
 type
-  TForm8 = class(TForm)
+  THeaderImgForm = class(TForm)
     Button1: TButton;
     RadioGroup1: TRadioGroup;
     RadioGroup2: TRadioGroup;
@@ -27,7 +27,7 @@ type
   end;
 
 var
-  Form8: TForm8;
+  HeaderImgForm: THeaderImgForm;
 
 implementation
 
@@ -35,12 +35,12 @@ uses Scanner1, PID;
 
 {$R *.DFM}
 
-procedure TForm8.FormCreate(Sender: TObject);
+procedure THeaderImgForm.FormCreate(Sender: TObject);
 begin
   Button1Click(nil);
 end;
 
-procedure TForm8.Button1Click(Sender: TObject);
+procedure THeaderImgForm.Button1Click(Sender: TObject);
 var
 MyComments, strLine, strUnit: AnsiString;
 
@@ -81,16 +81,16 @@ begin
 
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
-  strLine := MyFormat('    X Amplitude: %f nm', [abs(Form1.h.xend-Form1.h.xstart)*1e9*Form1.CalX]);
+  strLine := MyFormat('    X Amplitude: %f nm', [abs(ScanForm.h.xend-ScanForm.h.xstart)*1e9*ScanForm.CalX]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
-  strLine := MyFormat('    X Offset: %f nm', [Form1.XOffset*10*Form1.AmpX*Form1.CalX]);
+  strLine := MyFormat('    X Offset: %f nm', [ScanForm.XOffset*10*ScanForm.AmpX*ScanForm.CalX]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
-  strLine := MyFormat('    Y Amplitude: %f nm', [abs(Form1.h.yend-Form1.h.ystart)*1e9*Form1.CalY]);
+  strLine := MyFormat('    Y Amplitude: %f nm', [abs(ScanForm.h.yend-ScanForm.h.ystart)*1e9*ScanForm.CalY]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
-  strLine := MyFormat('    Y Offset: %f nm', [Form1.YOffset*10*Form1.AmpY*Form1.CalY]);
+  strLine := MyFormat('    Y Offset: %f nm', [ScanForm.YOffset*10*ScanForm.AmpY*ScanForm.CalY]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
   WSxMHeader := WSxMHeader+#13#10+
@@ -98,10 +98,10 @@ begin
         #13#10+
         '    Image Data Type: double'#13#10;
 
-  strLine := MyFormat('    Number of columns: %d', [Form1.P_Scan_Lines]);
+  strLine := MyFormat('    Number of columns: %d', [ScanForm.P_Scan_Lines]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
-  strLine := MyFormat('    Number of rows: %d', [Form1.P_Scan_Lines]);
+  strLine := MyFormat('    Number of rows: %d', [ScanForm.P_Scan_Lines]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
   strLine := MyFormat('    Z Amplitude: 1 %s', [strUnit]); // Si se guardan como flotantes el número se ignora el valor. Se usa la unidad con el valor que venga en la matriz

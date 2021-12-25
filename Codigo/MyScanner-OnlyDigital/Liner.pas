@@ -20,7 +20,7 @@ uses
 type
   TDataCurve = Array [0..1,0..2048] of single;
 
-  TForm4 = class(TForm)
+  TLinerForm = class(TForm)
 //    xyyGraph1: TxyyGraph;
     Button1: TButton;
     Button2: TButton;
@@ -130,7 +130,7 @@ type
   end;
 
 var
-  Form4: TForm4;
+  LinerForm: TLinerForm;
 
   b : TblqLoader ;
   blqname : AnsiString ;
@@ -146,31 +146,31 @@ uses Config_Liner, Scanner1, DataAdcquisition, PID, Config1;
 {$R *.DFM}
 
 //Open Config
-procedure TForm4.Button5Click(Sender: TObject);
+procedure TLinerForm.Button5Click(Sender: TObject);
 begin
-Form7.Show;
+ConfigLinerForm.Show;
 end;
 
 //Open Liner
-procedure TForm4.FormShow(Sender: TObject);
+procedure TLinerForm.FormShow(Sender: TObject);
 begin
 //xyyGraph1[1].PlotPoints:=False;
 Abort_Measure:=False;
-if Form7.RadioGroup1.ItemIndex=0 then ReadXfromADC:=True else
+if ConfigLinerForm.RadioGroup1.ItemIndex=0 then ReadXfromADC:=True else
 ReadXfromADC:=False;
-x_axisDac:=Form7.SpinEdit1.Value;
-x_axisAdc:=Form7.seADCxaxis.Value;
-x_axisMult:=StrtoFloat(Form7.Edit1.Text);
+x_axisDac:=ConfigLinerForm.SpinEdit1.Value;
+x_axisAdc:=ConfigLinerForm.seADCxaxis.Value;
+x_axisMult:=StrtoFloat(ConfigLinerForm.Edit1.Text);
 NumCol:=1;
-if Form7.Checkbox1.checked then NumCol:=NumCol+1;
-if Form7.Checkbox2.checked then NumCol:=NumCol+1;
-if Form7.Checkbox3.checked then NumCol:=NumCol+1;
-ReadZ:=Form7.Checkbox1.checked;
-ReadCurrent:=Form7.Checkbox2.checked;
-ReadOther:=Form7.Checkbox3.checked;
+if ConfigLinerForm.Checkbox1.checked then NumCol:=NumCol+1;
+if ConfigLinerForm.Checkbox2.checked then NumCol:=NumCol+1;
+if ConfigLinerForm.Checkbox3.checked then NumCol:=NumCol+1;
+ReadZ:=ConfigLinerForm.Checkbox1.checked;
+ReadCurrent:=ConfigLinerForm.Checkbox2.checked;
+ReadOther:=ConfigLinerForm.Checkbox3.checked;
 
 PointNumber:=StrtoInt(ComboBox1.Text);  // Número de puntos de cada IV
-Form1.RedimCits(Form1.IV_Scan_Lines, PointNumber);
+ScanForm.RedimCits(ScanForm.IV_Scan_Lines, PointNumber);
 
 LinerMean:=SpinEdit3.Value;
 Jump_xAxis:=SpinEdit4.Value;
@@ -184,7 +184,7 @@ PaintYesNo:=chkPainYesNo.checked;
 end;
 
 //Do
-procedure TForm4.Button1Click(Sender: TObject);
+procedure TLinerForm.Button1Click(Sender: TObject);
 {Salvo y lo meto en:
   ida                 vuelta
   DataX[0,i]          DataX[1,i]
@@ -225,17 +225,17 @@ here_previous_ctrl:=0;
   begin
 
     // Be careful with the following things, because the voltage will be suddenly modified
-    if Form7.CheckBox4.Checked then   // This is when we want to reverse the bias
+    if ConfigLinerForm.CheckBox4.Checked then   // This is when we want to reverse the bias
     begin
-      if Form7.chkReduceRamp.Checked then    //This is when we want to make an IV curve with a reduced ramp
-        Princ:=Round(-32768/Form7.seReduceRampFactor.Value*Size_xAxis)
+      if ConfigLinerForm.chkReduceRamp.Checked then    //This is when we want to make an IV curve with a reduced ramp
+        Princ:=Round(-32768/ConfigLinerForm.seReduceRampFactor.Value*Size_xAxis)
       else
     Princ:=Round(-32768*Size_xAxis);
     end
     else
     begin
-      if Form7.chkReduceRamp.Checked then    //This is when we want to make an IV curve with a reduced ramp
-        Princ:=Round(32768/Form7.seReduceRampFactor.Value*Size_xAxis)
+      if ConfigLinerForm.chkReduceRamp.Checked then    //This is when we want to make an IV curve with a reduced ramp
+        Princ:=Round(32768/ConfigLinerForm.seReduceRampFactor.Value*Size_xAxis)
       else
     Princ:=Round(32768*Size_xAxis);
     end;
@@ -246,11 +246,11 @@ here_previous_ctrl:=0;
 
     // Forth (Rampa de ida)
     // Lectura de UNA rampa de ida
-    Form10.ramp_take(x_axisDac, Princ, Fin, 0, PointNumber, Jump_xaxis, 0, chkAcquireBlock.Checked);
+    DataAdcquisitionForm.ramp_take(x_axisDac, Princ, Fin, 0, PointNumber, Jump_xaxis, 0, chkAcquireBlock.Checked);
 
     // Back (rampa de vuelta)
     //Lectura de UNA rampa de vuelta
-    Form10.ramp_take(x_axisDac, Fin, Princ, 1, PointNumber, Jump_xaxis, 0, chkAcquireBlock.Checked);
+    DataAdcquisitionForm.ramp_take(x_axisDac, Fin, Princ, 1, PointNumber, Jump_xaxis, 0, chkAcquireBlock.Checked);
 
     {FormPID.Button8Click(nil);
     sleep(20);
@@ -271,11 +271,11 @@ here_previous_ctrl:=0;
 
     // Esto es peligroso, pero lo hacemos, a ver si no da problemas ...
     // volvemos a poner Princ al valor máximo antes de hacer funcionar el control otra vez
-    if Form7.chkReduceRamp.Checked then
-      if Form7.CheckBox4.Checked then Princ:=Round(-32768*Size_xAxis)
+    if ConfigLinerForm.chkReduceRamp.Checked then
+      if ConfigLinerForm.CheckBox4.Checked then Princ:=Round(-32768*Size_xAxis)
       else Princ:=Round(32768*Size_xAxis);
 
-    Form10.dac_set(x_axisDAC,Princ, nil);
+    DataAdcquisitionForm.dac_set(x_axisDAC,Princ, nil);
 
     // Vamos a dejar funcionar el control durante 2 s
     if (j>=0) then
@@ -313,7 +313,7 @@ here_previous_ctrl:=0;
 end;
 
 //Abort
-procedure TForm4.Button3Click(Sender: TObject);
+procedure TLinerForm.Button3Click(Sender: TObject);
 begin
 if Abort_Measure=False then Abort_Measure:=True;
 if (Button2.Caption='STOP') then
@@ -322,14 +322,14 @@ if (Button2.Caption='STOP') then
 end;
 
 //Número de puntos
-procedure TForm4.ComboBox1Change(Sender: TObject);
+procedure TLinerForm.ComboBox1Change(Sender: TObject);
 begin
 PointNumber:=StrtoInt(Combobox1.Text);
-Form1.RedimCits(Form1.IV_Scan_Lines, Form4.PointNumber);
+ScanForm.RedimCits(ScanForm.IV_Scan_Lines, LinerForm.PointNumber);
 end;
 
 //Función para derivar
-procedure TForm4.DerivaRectas (vin:vcurva;out vout:vcurva);
+procedure TLinerForm.DerivaRectas (vin:vcurva;out vout:vcurva);
 //Los parámetros de la función son vin (input) y vout (output).
 //Son variables tipo "vcurva". "vcurva" es una estructura donde .x son los datos de la ida, .y los datos de la vuelta, y .n otra cosa no importante para esto.
 //Para derivar, los datos "Y" están guardados en la vcurva, y los datos "X" están guardados en DataX
@@ -345,7 +345,7 @@ begin
     end;
     vout.n := m;
 
-pderi:=Form4.SpinEdit5.Value;//Puntos de derivada
+pderi:=LinerForm.SpinEdit5.Value;//Puntos de derivada
 pderi:= pderi - 1;
 
 if pderi=0 then begin //Si un punto de derivada
@@ -408,19 +408,19 @@ end;
 end;
 
 //Cambio en Mean
-procedure TForm4.SpinEdit3Change(Sender: TObject);
+procedure TLinerForm.SpinEdit3Change(Sender: TObject);
 begin
   TryStrToInt(SpinEdit3.Text, LinerMean);
 end;
 
 //Cambio en Jump
-procedure TForm4.SpinEdit4Change(Sender: TObject);
+procedure TLinerForm.SpinEdit4Change(Sender: TObject);
 begin
   TryStrToInt(SpinEdit4.Text, Jump_xAxis);
 end;
 
 //Pintar las curvas
-procedure TForm4.RadioGroup2Click(Sender: TObject);
+procedure TLinerForm.RadioGroup2Click(Sender: TObject);
 var
 i: Integer;
 DatatoPlot_X: Array[0..1,0..2048] of single;
@@ -499,7 +499,7 @@ end;
 end;
 
 //DoDo
-procedure TForm4.Button2Click(Sender: TObject);
+procedure TLinerForm.Button2Click(Sender: TObject);
 begin
 Application.ProcessMessages;
 if (Button2.Caption='STOP') then
@@ -520,7 +520,7 @@ if (Button2.Caption='STOP') then
 end;
 
 //Delete Graph
-procedure TForm4.Button8Click(Sender: TObject);
+procedure TLinerForm.Button8Click(Sender: TObject);
 begin
   ClearChart();
 //xyyGraph1.Clear;
@@ -528,7 +528,7 @@ begin
 end;
 
 //Guardar
-procedure TForm4.Button4Click(Sender: TObject);
+procedure TLinerForm.Button4Click(Sender: TObject);
 var
 i,j,k,cols,BlockOffset: Integer;
 BlockFileName:String;
@@ -540,8 +540,8 @@ BlockFileName:=SaveDialog1.Filename+InttoStr(SpinEdit1.Value)+'.blq';
 TakeComment:=AnsiString(DateTimeToStr(Now)+#13+#10+
     'T(K)='+FloattoStr(Temperature)+#13+#10+
     'B(T)='+FloattoStr(MagField)+#13+#10+
-    'X(nm)='+FloattoStrF(Form1.XOffset*10*Form1.AmpX*Form1.CalX, ffGeneral, 5, 4)+#13+#10+
-    'Y(nm)='+FloattoStrF(Form1.YOffset*10*Form1.AmpY*Form1.CalY, ffGeneral, 5, 4)+#13+#10);
+    'X(nm)='+FloattoStrF(ScanForm.XOffset*10*ScanForm.AmpX*ScanForm.CalX, ffGeneral, 5, 4)+#13+#10+
+    'Y(nm)='+FloattoStrF(ScanForm.YOffset*10*ScanForm.AmpY*ScanForm.CalY, ffGeneral, 5, 4)+#13+#10);
   for k:=0 to 1 do
   begin
   BlockOffset:=k;
@@ -610,7 +610,7 @@ end;
 
 // Guarda las curvas IV en el formato de WSxM
 // Nacho Horcas, diciembre de 2017
-procedure TForm4.SaveIV(fileName: string; dataSet: Integer; comments: AnsiString);
+procedure TLinerForm.SaveIV(fileName: string; dataSet: Integer; comments: AnsiString);
 var
   myFile : TextFile;
   commentsWSxM, strLine: AnsiString;
@@ -700,7 +700,7 @@ end;
 
 
 //Set File Name
-procedure TForm4.Button9Click(Sender: TObject);
+procedure TLinerForm.Button9Click(Sender: TObject);
 begin
 SaveDialog1.FileName:=Edit1.Text;
 
@@ -715,7 +715,7 @@ Edit1.Text:=ExtractFileName(SaveDialog1.FileName);
 end;
 
 //En principio no hace nada, button10 no existe
-procedure TForm4.Button10Click(Sender: TObject);
+procedure TLinerForm.Button10Click(Sender: TObject);
 var
 BlockFile:String;
 
@@ -730,14 +730,14 @@ Application.ProcessMessages;
 end;
 
 //Temperatura
-procedure TForm4.Edit5Enter(Sender: TObject);
+procedure TLinerForm.Edit5Enter(Sender: TObject);
 begin
 if (Edit5.text='')then exit;
 Temperature:=StrtoFloat(Edit5.Text);
 MagField:=StrtoFloat(Edit6.Text);
 end;
 //Campo magnético
-procedure TForm4.Edit6Enter(Sender: TObject);
+procedure TLinerForm.Edit6Enter(Sender: TObject);
 begin
 if (Edit6.text='')then exit;
 Temperature:=StrtoFloat(Edit5.Text);
@@ -745,32 +745,32 @@ MagField:=StrtoFloat(Edit6.Text);
 end;
 
 //blq Number para guardar
-procedure TForm4.SpinEdit1Change(Sender: TObject);
+procedure TLinerForm.SpinEdit1Change(Sender: TObject);
 begin
   Presentblknumber:=0;
   Label12.Caption:=InttoStr(Presentblknumber);
 end;
 
 //Pintar cada vez que pulsamos "Direct" o "Derivative"
-procedure TForm4.RadioGroup1Click(Sender: TObject);
+procedure TLinerForm.RadioGroup1Click(Sender: TObject);
 begin
 RadioGroup2Click(nil);
 end;
 
 //Cambiar bias
-procedure TForm4.scrollSizeBiasChange(Sender: TObject);
+procedure TLinerForm.scrollSizeBiasChange(Sender: TObject);
 begin
 Size_xAxis:=scrollSizeBias.Position/100;
-if Form7.CheckBox4.Checked then
-Form10.dac_set(Form7.SpinEdit1.Value, Round(-32767*Size_xAxis), nil)
+if ConfigLinerForm.CheckBox4.Checked then
+DataAdcquisitionForm.dac_set(ConfigLinerForm.SpinEdit1.Value, Round(-32767*Size_xAxis), nil)
 else
-Form10.dac_set(Form7.SpinEdit1.Value, Round(32767*Size_xAxis), nil);
+DataAdcquisitionForm.dac_set(ConfigLinerForm.SpinEdit1.Value, Round(32767*Size_xAxis), nil);
 
 Label18.Caption:=IntToStr(scrollSizeBias.Position);
 end;
 
 //Pintar cuando cambias los puntos de derivada
-procedure TForm4.SpinEdit5Change(Sender: TObject);
+procedure TLinerForm.SpinEdit5Change(Sender: TObject);
 begin
 if RadioGroup1.ItemIndex=0 then
   begin
@@ -782,7 +782,7 @@ if RadioGroup1.ItemIndex=0 then
 end;
 
 //Hold PID
-procedure TForm4.Button7Click(Sender: TObject);
+procedure TLinerForm.Button7Click(Sender: TObject);
 begin
   if StopIt then
     begin
@@ -801,7 +801,7 @@ begin
 end;
 
 //Hold cuando toma las IV
-procedure TForm4.Button6Click(Sender: TObject);
+procedure TLinerForm.Button6Click(Sender: TObject);
 begin
 if Abort_Measure=False then Abort_Measure:=True;
 if (Button2.Caption='STOP') then
@@ -809,13 +809,13 @@ if (Button2.Caption='STOP') then
  Application.ProcessMessages;
 end;
 
-procedure TForm4.ClearChart();
+procedure TLinerForm.ClearChart();
 begin
   ChartLineSerie0.Clear();
   ChartLineSerie1.Clear();
 end;
 
-procedure TForm4.chkAcquireBlockClick(Sender: TObject);
+procedure TLinerForm.chkAcquireBlockClick(Sender: TObject);
 begin
   if chkAcquireBlock.Checked then
     begin
@@ -827,7 +827,7 @@ begin
     SpinEdit3.MaxValue := 999999
 end;
 
-procedure TForm4.chkPainYesNoClick(Sender: TObject);
+procedure TLinerForm.chkPainYesNoClick(Sender: TObject);
 begin
 PaintYesNo:=chkPainYesNo.Checked;
 end;

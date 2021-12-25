@@ -7,7 +7,7 @@ uses
   StdCtrls, ExtCtrls, Spin;
 
 type
-  TForm7 = class(TForm)
+  TConfigLinerForm = class(TForm)
     Panel1: TPanel;
     Label1: TLabel;
     Label2: TLabel;
@@ -45,7 +45,7 @@ type
   end;
 
 var
-  Form7: TForm7;
+  ConfigLinerForm: TConfigLinerForm;
 
 implementation
 
@@ -53,79 +53,79 @@ uses Liner;
 
 {$R *.DFM}
 
-procedure TForm7.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TConfigLinerForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-if RadioGroup1.ItemIndex=0 then Form4.ReadXfromADC:=True else
-Form4.ReadXfromADC:=False;
+if RadioGroup1.ItemIndex=0 then LinerForm.ReadXfromADC:=True else
+LinerForm.ReadXfromADC:=False;
 
-Form4.x_axisDac:=SpinEdit1.Value;
-Form4.x_axisADC:=seADCxaxis.Value;
-Form4.x_axisMult:=StrtoFloat(Edit1.Text);
-Form4.NumCol:=1;
-if Checkbox1.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox2.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox3.checked then Form4.NumCol:=Form4.NumCol+1;
-Form4.ReadZ:=Checkbox1.checked;
-Form4.ReadCurrent:=Checkbox2.checked;
-Form4.ReadOther:=Checkbox3.checked;
+LinerForm.x_axisDac:=SpinEdit1.Value;
+LinerForm.x_axisADC:=seADCxaxis.Value;
+LinerForm.x_axisMult:=StrtoFloat(Edit1.Text);
+LinerForm.NumCol:=1;
+if Checkbox1.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox2.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox3.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+LinerForm.ReadZ:=Checkbox1.checked;
+LinerForm.ReadCurrent:=Checkbox2.checked;
+LinerForm.ReadOther:=Checkbox3.checked;
 
 end;
 
-procedure TForm7.SpinEdit1Change(Sender: TObject);
+procedure TConfigLinerForm.SpinEdit1Change(Sender: TObject);
 begin
-  TryStrToInt(SpinEdit1.Text, Form4.x_axisDac);
+  TryStrToInt(SpinEdit1.Text, LinerForm.x_axisDac);
 end;
 
-procedure TForm7.RadioGroup1Click(Sender: TObject);
+procedure TConfigLinerForm.RadioGroup1Click(Sender: TObject);
 begin
-if RadioGroup1.ItemIndex=0 then Form4.ReadXfromADC:=True else
-Form4.ReadXfromADC:=False;
+if RadioGroup1.ItemIndex=0 then LinerForm.ReadXfromADC:=True else
+LinerForm.ReadXfromADC:=False;
 end;
 
-procedure TForm7.Edit1Change(Sender: TObject);
+procedure TConfigLinerForm.Edit1Change(Sender: TObject);
 begin
-Form4.x_axisMult:=StrtoFloat(Edit1.Text);
+LinerForm.x_axisMult:=StrtoFloat(Edit1.Text);
 end;
 
-procedure TForm7.CheckBox1Click(Sender: TObject);
+procedure TConfigLinerForm.CheckBox1Click(Sender: TObject);
 begin
-Form4.NumCol:=1;
-if Checkbox1.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox2.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox3.checked then Form4.NumCol:=Form4.NumCol+1;
-Form4.ReadZ:=Checkbox1.checked;
-Form4.ReadCurrent:=Checkbox2.checked;
-Form4.ReadOther:=Checkbox3.checked;
+LinerForm.NumCol:=1;
+if Checkbox1.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox2.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox3.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+LinerForm.ReadZ:=Checkbox1.checked;
+LinerForm.ReadCurrent:=Checkbox2.checked;
+LinerForm.ReadOther:=Checkbox3.checked;
 end;
 
-procedure TForm7.CheckBox2Click(Sender: TObject);
+procedure TConfigLinerForm.CheckBox2Click(Sender: TObject);
 begin
-Form4.NumCol:=1;
-if Checkbox1.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox2.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox3.checked then Form4.NumCol:=Form4.NumCol+1;
-Form4.ReadZ:=Checkbox1.checked;
-Form4.ReadCurrent:=Checkbox2.checked;
-Form4.ReadOther:=Checkbox3.checked;
+LinerForm.NumCol:=1;
+if Checkbox1.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox2.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox3.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+LinerForm.ReadZ:=Checkbox1.checked;
+LinerForm.ReadCurrent:=Checkbox2.checked;
+LinerForm.ReadOther:=Checkbox3.checked;
 end;
 
-procedure TForm7.CheckBox3Click(Sender: TObject);
+procedure TConfigLinerForm.CheckBox3Click(Sender: TObject);
 begin
-Form4.NumCol:=1;
-if Checkbox1.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox2.checked then Form4.NumCol:=Form4.NumCol+1;
-if Checkbox3.checked then Form4.NumCol:=Form4.NumCol+1;
-Form4.ReadZ:=Checkbox1.checked;
-Form4.ReadCurrent:=Checkbox2.checked;
-Form4.ReadOther:=Checkbox3.checked;
+LinerForm.NumCol:=1;
+if Checkbox1.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox2.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+if Checkbox3.checked then LinerForm.NumCol:=LinerForm.NumCol+1;
+LinerForm.ReadZ:=Checkbox1.checked;
+LinerForm.ReadCurrent:=Checkbox2.checked;
+LinerForm.ReadOther:=Checkbox3.checked;
 end;
 
-procedure TForm7.CheckBox4Click(Sender: TObject);
+procedure TConfigLinerForm.CheckBox4Click(Sender: TObject);
 begin
-Form4.scrollSizeBiasChange(nil);
+LinerForm.scrollSizeBiasChange(nil);
 end;
 
-procedure TForm7.RadioGroup2Click(Sender: TObject);
+procedure TConfigLinerForm.RadioGroup2Click(Sender: TObject);
 begin
 if RadioGroup2.ItemIndex = 0 then Edit1.Text:='10';
 if RadioGroup2.ItemIndex = 1 then Edit1.Text:='1';
@@ -134,9 +134,9 @@ if RadioGroup2.ItemIndex = 3 then Edit1.Text:='0.01';
 if RadioGroup2.ItemIndex = 4 then Edit1.Text:='0.001';
 end;
 
-procedure TForm7.seADCxaxisChange(Sender: TObject);
+procedure TConfigLinerForm.seADCxaxisChange(Sender: TObject);
 begin
-  TryStrToInt(seADCxaxis.Text, Form4.x_axisAdc);
+  TryStrToInt(seADCxaxis.Text, LinerForm.x_axisAdc);
 end;
 
 end.

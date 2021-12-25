@@ -62,9 +62,6 @@
         <DCC_MaxStackSize>16777216</DCC_MaxStackSize>
         <DCC_UnitSearchPath>$(DELPHI)\Lib\Debug;C:\Program Files\NTPort Library;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_UsePackage>VCL50;VCLX50;VCLSMP50;dclocx50;dclaxserver50;VCLDB50;$(DCC_UsePackage)</DCC_UsePackage>
-        <DCC_UNSAFE_TYPE>true</DCC_UNSAFE_TYPE>
-        <DCC_UNSAFE_CODE>true</DCC_UNSAFE_CODE>
-        <DCC_UNSAFE_CAST>true</DCC_UNSAFE_CAST>
         <SanitizedProjectName>MyScanner</SanitizedProjectName>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;VclTee;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -107,31 +104,34 @@
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_MinorVer>0</VerInfo_MinorVer>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Scanner1.pas">
-            <Form>Form1</Form>
+            <Form>ScanForm</Form>
         </DCCReference>
         <DCCReference Include="Scanning.pas">
-            <Form>Form3</Form>
+            <Form>ScanningForm</Form>
         </DCCReference>
         <DCCReference Include="Trip.pas">
-            <Form>Form5</Form>
+            <Form>TripForm</Form>
         </DCCReference>
         <DCCReference Include="Liner.pas">
-            <Form>Form4</Form>
+            <Form>LinerForm</Form>
         </DCCReference>
         <DCCReference Include="Config_Liner.pas">
-            <Form>Form7</Form>
+            <Form>ConfigLinerForm</Form>
         </DCCReference>
         <DCCReference Include="Config1.pas">
-            <Form>Form2</Form>
+            <Form>ConfigForm</Form>
         </DCCReference>
         <DCCReference Include="Config_Trip.pas">
-            <Form>Form6</Form>
+            <Form>ConfigTripForm</Form>
         </DCCReference>
         <DCCReference Include="blqDataSet.pas">
             <Form>blqDataSetForm</Form>
@@ -141,19 +141,19 @@
         </DCCReference>
         <DCCReference Include="var_gbl.pas"/>
         <DCCReference Include="HeaderImg.pas">
-            <Form>Form8</Form>
+            <Form>HeaderImgForm</Form>
         </DCCReference>
         <DCCReference Include="FileNames.pas">
-            <Form>Form9</Form>
+            <Form>FileForm</Form>
         </DCCReference>
         <DCCReference Include="DataAdcquisition.pas">
-            <Form>Form10</Form>
+            <Form>DataAdcquisitionForm</Form>
         </DCCReference>
         <DCCReference Include="PID.pas">
             <Form>FormPID</Form>
         </DCCReference>
         <DCCReference Include="Config_IV.pas">
-            <Form>Form11</Form>
+            <Form>Config_IVForm</Form>
         </DCCReference>
         <DCCReference Include="Paste.pas">
             <Form>FormPaste</Form>
@@ -179,6 +179,10 @@
                 <Source>
                     <Source Name="MainSource">MyScanner.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k270.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp270.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Platforms>
                 <Platform value="Win32">True</Platform>

@@ -7,7 +7,7 @@ uses
   StdCtrls, Spin, math;
 
 type
-  TForm5 = class(TForm)
+  TTripForm = class(TForm)
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -47,7 +47,7 @@ type
   end;
 
 var
-  Form5: TForm5;
+  TripForm: TTripForm;
 
 implementation
 
@@ -65,84 +65,84 @@ function take_finalize : boolean ;  external 'take_dilucion.dll' ;
 
 {$R *.DFM}
 
-procedure TForm5.Button5Click(Sender: TObject);
+procedure TTripForm.Button5Click(Sender: TObject);
 begin
-Form6.Show;
+ConfigTripForm.Show;
 end;
 
-procedure TForm5.ScrollBar2Change(Sender: TObject);
+procedure TTripForm.ScrollBar2Change(Sender: TObject);
 begin
 Size:=ScrollBar2.Position;
 Label6.Caption:=InttoStr(Size);
 end;
 
-procedure TForm5.ScrollBar1Change(Sender: TObject);
+procedure TTripForm.ScrollBar1Change(Sender: TObject);
 begin
 Speed:=ScrollBar1.Position;
 Label5.Caption:=InttoStr(Speed);
 end;
 
-procedure TForm5.FormShow(Sender: TObject);
+procedure TTripForm.FormShow(Sender: TObject);
 begin
-Form6.Show;
+ConfigTripForm.Show;
 Size:=ScrollBar2.Position;
 Speed:=ScrollBar1.Position;
 times:=SpinEdit1.Value;
-Form6.Show;
-ZPDAC:=Form6.SpinEdit1.Value;
-IADC:=Form6.Spinedit2.Value;
-if (Form6.Checkbox1.checked) then Mult:=1 else Mult:=-1;
-if (Form6.Checkbox2.checked) then MultI:=1 else MultI:=-1;
-Form6.Hide;
+ConfigTripForm.Show;
+ZPDAC:=ConfigTripForm.SpinEdit1.Value;
+IADC:=ConfigTripForm.Spinedit2.Value;
+if (ConfigTripForm.Checkbox1.checked) then Mult:=1 else Mult:=-1;
+if (ConfigTripForm.Checkbox2.checked) then MultI:=1 else MultI:=-1;
+ConfigTripForm.Hide;
 end;
 
-procedure TForm5.Button1Click(Sender: TObject);
+procedure TTripForm.Button1Click(Sender: TObject);
 begin
   SetMoving(true);
   MakeSteps(times, 1);
   SetMoving(false);
 end;
 
-procedure TForm5.Spinedit1Change(Sender: TObject);
+procedure TTripForm.Spinedit1Change(Sender: TObject);
 begin
   TryStrToInt(SpinEdit1.Text, times);
 end;
 
-procedure TForm5.Button2Click(Sender: TObject);
+procedure TTripForm.Button2Click(Sender: TObject);
 begin
   SetMoving(true);
   MakeSteps(times, -1);
   SetMoving(false);
 end;
 
-procedure TForm5.Button3Click(Sender: TObject);
+procedure TTripForm.Button3Click(Sender: TObject);
 begin
   SetMoving(true);
   MakeSteps(100, -1);
   SetMoving(false);
 end;
 
-procedure TForm5.Button4Click(Sender: TObject);
+procedure TTripForm.Button4Click(Sender: TObject);
 var
 Strom_jetzt: Single;
 punto_salida: boolean;
 
 begin
 //Esta para probar hay que asignarle un valor minimo de corriente a aprtir de la cual pare de moverse
-//Strom_jetzt:=9;//adc_take(0,ADCI,Form1.P_Scan_Mean))
+//Strom_jetzt:=9;//adc_take(0,ADCI,ScanForm.P_Scan_Mean))
 //StopTrip:=False;
   SetMoving(true);
   StopTrip:=False;
   punto_salida:=false;
   while (punto_salida=false) do
   begin
-    Strom_jetzt:=  Form10.adc_take(Form6.SpinEdit2.Value,Form6.SpinEdit2.Value,Form1.P_Scan_Mean);
+    Strom_jetzt:=  DataAdcquisitionForm.adc_take(ConfigTripForm.SpinEdit2.Value,ConfigTripForm.SpinEdit2.Value,ScanForm.P_Scan_Mean);
     //Label7.caption:=Floattostr(Strom_jetzt);
     //times:=1000;
-    while (abs(Strom_jetzt)<(Form6.spinCurrentLimit.Value/100)) and (StopTrip=False) do
+    while (abs(Strom_jetzt)<(ConfigTripForm.spinCurrentLimit.Value/100)) and (StopTrip=False) do
     begin
       MakeSteps(times, 1);
-      Strom_jetzt:=  Form10.adc_take(Form6.SpinEdit2.Value,Form6.SpinEdit2.Value,Form1.P_Scan_Mean);
+      Strom_jetzt:=  DataAdcquisitionForm.adc_take(ConfigTripForm.SpinEdit2.Value,ConfigTripForm.SpinEdit2.Value,ScanForm.P_Scan_Mean);
     end;
     punto_salida:=True;
     //times:=Spinedit1.Value;
@@ -150,12 +150,12 @@ begin
   SetMoving(false);
 end;
 
-procedure TForm5.Button6Click(Sender: TObject);
+procedure TTripForm.Button6Click(Sender: TObject);
 begin
   StopTrip:=True;
 end;
 
-procedure TForm5.Button7Click(Sender: TObject);
+procedure TTripForm.Button7Click(Sender: TObject);
 begin
   if (Round(SpinEdit1.Value/10)>0) then
     SpinEdit1.Value:=Round(SpinEdit1.Value/10)
@@ -163,12 +163,12 @@ begin
     SpinEdit1.Value:=1;
 end;
 
-procedure TForm5.Button8Click(Sender: TObject);
+procedure TTripForm.Button8Click(Sender: TObject);
 begin
   SpinEdit1.Value:=SpinEdit1.Value*10;
 end;
 
-procedure TForm5.SetMoving(moving: Boolean);
+procedure TTripForm.SetMoving(moving: Boolean);
 begin
   // Habilitamos o deshabilitamos los botones de movimiento que correspondan
   Button1.Enabled := not moving;
@@ -179,7 +179,7 @@ begin
 end;
 
 
-procedure TForm5.MakeSteps(numSteps, direction: Integer);
+procedure TTripForm.MakeSteps(numSteps, direction: Integer);
 var
 i,j: Integer;
 enviaZ: Integer;
@@ -194,13 +194,13 @@ begin
       if Frac(j/Speed)=0 then
       begin
         enviaZ:=direction*Mult*Round(j*Size/10);
-        Form10.dac_set(ZPDac,enviaZ, nil);
+        DataAdcquisitionForm.dac_set(ZPDac,enviaZ, nil);
       end;
     end;
     Application.ProcessMessages;
     i:=i+1;
   end;
-  Form10.dac_set(ZPDac,0, nil);
+  DataAdcquisitionForm.dac_set(ZPDac,0, nil);
 end;
 
 end.

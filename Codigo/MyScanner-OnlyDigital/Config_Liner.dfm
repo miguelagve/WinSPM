@@ -1,9 +1,9 @@
-object Form7: TForm7
+object ConfigLinerForm: TConfigLinerForm
   Left = 278
   Top = 411
-  Width = 490
-  Height = 298
   Caption = 'BiasConfig'
+  ClientHeight = 259
+  ClientWidth = 474
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -192,7 +192,7 @@ object Form7: TForm7
       MaxValue = 20
       MinValue = 1
       TabOrder = 0
-      Value = 0
+      Value = 1
     end
     object chkReduceRamp: TCheckBox
       Left = 24

@@ -1,9 +1,9 @@
-object Form11: TForm11
+object Config_IVForm: TConfig_IVForm
   Left = 551
   Top = 739
-  Width = 212
-  Height = 120
   Caption = 'IV config'
+  ClientHeight = 81
+  ClientWidth = 196
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -45,7 +45,6 @@ object Form11: TForm11
     Top = 27
     Width = 65
     Height = 21
-    ItemHeight = 13
     ItemIndex = 5
     TabOrder = 2
     Text = '256'

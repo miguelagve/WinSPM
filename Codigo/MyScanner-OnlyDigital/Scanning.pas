@@ -12,7 +12,7 @@ uses
   ;
 
 type
-  TForm3 = class(TForm)
+  TScanningForm = class(TForm)
     ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
     Button1: TButton;
@@ -70,7 +70,7 @@ type
   end;
 
 var
-  Form3: TForm3;
+  ScanningForm: TScanningForm;
 
 implementation
 
@@ -78,30 +78,30 @@ uses Scanner1, PID;
 
 {$R *.DFM}
 
-procedure TForm3.Button1Click(Sender: TObject);
+procedure TScanningForm.Button1Click(Sender: TObject);
 begin
 CheckBox1.Checked:=False;
-Form1.StopAction:=True;
+ScanForm.StopAction:=True;
 //FormPID.se1.Text:='1'; //Comentado por Fran
 end;
 
-procedure TForm3.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TScanningForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 //xyyGraph1.Clear;
 ClearChart();
-Form1.StopAction:=True;
+ScanForm.StopAction:=True;
 //FormPID.se1.Text:='1'; //Comentado por Fran
 end;
 
-procedure TForm3.Button2Click(Sender: TObject);
+procedure TScanningForm.Button2Click(Sender: TObject);
 begin
-if (Form1.PauseAction) then
-begin Button2.Caption:='PAUSE'; Form1.PauseAction:=False; end
+if (ScanForm.PauseAction) then
+begin Button2.Caption:='PAUSE'; ScanForm.PauseAction:=False; end
 else
-begin Button2.Caption:='CONTINUE'; Form1.PauseAction:=True; end;
+begin Button2.Caption:='CONTINUE'; ScanForm.PauseAction:=True; end;
 end;
 
-procedure TForm3.UpdateBitmaps(Sender: TObject);
+procedure TScanningForm.UpdateBitmaps(Sender: TObject);
 var
   flatten: Integer;
   MakeX: Boolean;
@@ -112,25 +112,25 @@ begin
     if chkFlatten.Checked then
       flatten := 1;
 
-    MakeX := (Form1.RadioGroup1.ItemIndex=0);
+    MakeX := (ScanForm.RadioGroup1.ItemIndex=0);
 
-    if Form3.RadioGroup1.ItemIndex=0 then
+    if ScanningForm.RadioGroup1.ItemIndex=0 then
     begin
-      Data := Form1.FilterImage(Form1.Dat_Image_Forth[1], MakeX, Form1.P_Scan_Lines, flatten);
-      FillImg(Sender,Data,Form1.P_Scan_Lines,1);
-      Data := Form1.FilterImage(Form1.Dat_Image_Back[1], MakeX, Form1.P_Scan_Lines, flatten);
-      FillImg(Sender,Data,Form1.P_Scan_Lines,2);
+      Data := ScanForm.FilterImage(ScanForm.Dat_Image_Forth[1], MakeX, ScanForm.P_Scan_Lines, flatten);
+      FillImg(Sender,Data,ScanForm.P_Scan_Lines,1);
+      Data := ScanForm.FilterImage(ScanForm.Dat_Image_Back[1], MakeX, ScanForm.P_Scan_Lines, flatten);
+      FillImg(Sender,Data,ScanForm.P_Scan_Lines,2);
     end
     else
     begin
-      Data := Form1.FilterImage(Form1.Dat_Image_Forth[2], MakeX, Form1.P_Scan_Lines, flatten);
-      FillImg(Sender,Data,Form1.P_Scan_Lines,1);
-      Data := Form1.FilterImage(Form1.Dat_Image_Back[2], MakeX, Form1.P_Scan_Lines, flatten);
-      FillImg(Sender,Data,Form1.P_Scan_Lines,2);
+      Data := ScanForm.FilterImage(ScanForm.Dat_Image_Forth[2], MakeX, ScanForm.P_Scan_Lines, flatten);
+      FillImg(Sender,Data,ScanForm.P_Scan_Lines,1);
+      Data := ScanForm.FilterImage(ScanForm.Dat_Image_Back[2], MakeX, ScanForm.P_Scan_Lines, flatten);
+      FillImg(Sender,Data,ScanForm.P_Scan_Lines,2);
     end;
 end;
 
-procedure TForm3.FillImg(Sender: TObject; Data: HImg; Size: Integer; Sens: Integer);
+procedure TScanningForm.FillImg(Sender: TObject; Data: HImg; Size: Integer; Sens: Integer);
 var
 i,j: Integer;
 DatatoPaint: Array[0..512,0..512] of Integer;
@@ -228,7 +228,7 @@ end; }
 
 end;
 
-procedure TForm3.FreeScans(Sender:TObject);
+procedure TScanningForm.FreeScans(Sender:TObject);
 var
 i,j: integer ;
 bmp : TBitmap ;
@@ -257,75 +257,75 @@ begin
   bmp.Free ;
 end;
 
-procedure TForm3.Button3Click(Sender: TObject);
+procedure TScanningForm.Button3Click(Sender: TObject);
 begin
   ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum/2,ChartLine.LeftAxis.Maximum/2);
 end;
 
-procedure TForm3.Button4Click(Sender: TObject);
+procedure TScanningForm.Button4Click(Sender: TObject);
 begin
   ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum*2, ChartLine.LeftAxis.Maximum*2);
 end;
 
-procedure TForm3.Button5Click(Sender: TObject);
+procedure TScanningForm.Button5Click(Sender: TObject);
 begin
   ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum-0.05, ChartLine.LeftAxis.Maximum-0.05);
 end;
 
-procedure TForm3.Button6Click(Sender: TObject);
+procedure TScanningForm.Button6Click(Sender: TObject);
 begin
   ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum+0.05, ChartLine.LeftAxis.Maximum+0.05);
 end;
 
-procedure TForm3.FormShow(Sender: TObject);
+procedure TScanningForm.FormShow(Sender: TObject);
 begin
   ChartLine.LeftAxis.AxisValuesFormat := '0.##E+###';
   Button7Click(nil);
 end;
 
-procedure TForm3.Button7Click(Sender: TObject);
+procedure TScanningForm.Button7Click(Sender: TObject);
 begin
 //  ChartLine.LeftAxis.SetMinMax(-0.2,0.2);
   ChartLine.LeftAxis.Automatic := True;
 end;
 
-procedure TForm3.TrackBar1Change(Sender: TObject);
+procedure TScanningForm.TrackBar1Change(Sender: TObject);
 begin
 Label4.Caption:=InttoStr(Trackbar1.Position);
-Form1.TrackBar1.Position:=TrackBar1.Position;
-Form1.TiempoMedio:=0;
-Form1.PuntosPonderados:=0;
-Form1.TiempoInicial:=0;
+ScanForm.TrackBar1.Position:=TrackBar1.Position;
+ScanForm.TiempoMedio:=0;
+ScanForm.PuntosPonderados:=0;
+ScanForm.TiempoInicial:=0;
 end;
 
-procedure TForm3.TrackBar2Change(Sender: TObject);
+procedure TScanningForm.TrackBar2Change(Sender: TObject);
 begin
 Label5.Caption:=InttoStr(Trackbar2.Position);
 //P_Scan_Jump:= Trackbar2.Position;
-Form1.TrackBar2.Position:=TrackBar2.Position;
-Form1.TiempoMedio:=0;
-Form1.PuntosPonderados:=0;
-Form1.TiempoInicial:=0;
+ScanForm.TrackBar2.Position:=TrackBar2.Position;
+ScanForm.TiempoMedio:=0;
+ScanForm.PuntosPonderados:=0;
+ScanForm.TiempoInicial:=0;
 end;
 
-procedure TForm3.ClearChart();
+procedure TScanningForm.ClearChart();
 begin
   ChartLine.RemoveAllSeries();
 end;
 
-procedure TForm3.btnResetZoomOffsetClick(Sender: TObject);
+procedure TScanningForm.btnResetZoomOffsetClick(Sender: TObject);
 begin
   trckbrZoom.Position := 1;
   trckbrOffset.Position := 0;
   UpdateBitmaps(nil);
 end;
 
-procedure TForm3.trckbrZoomChange(Sender: TObject);
+procedure TScanningForm.trckbrZoomChange(Sender: TObject);
 begin
   UpdateBitmaps(nil);
 end;
 
-procedure TForm3.trckbrOffsetChange(Sender: TObject);
+procedure TScanningForm.trckbrOffsetChange(Sender: TObject);
 begin
   UpdateBitmaps(nil);
 end;

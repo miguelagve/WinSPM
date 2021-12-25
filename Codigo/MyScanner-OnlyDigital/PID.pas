@@ -247,7 +247,7 @@ begin
 
     //Application.ProcessMessages(); //Hermann
 
-    Read_PID := abs(Round(Form10.adc_take(InPID_ADC,InPID_ADC,MeanReadI)*32768));
+    Read_PID := abs(Round(DataAdcquisitionForm.adc_take(InPID_ADC,InPID_ADC,MeanReadI)*32768));
     thisError := (Set_PID/1000*32768)-Read_PID;
     lastIntegral := lastIntegral+thisError/1000; // Siendo formales, habría que multiplicar thisError por dt. Hermann prefiere no hacerlo.
     // Es que podríamos ponerlo, pero dt va a ser casi siempre 0.001 s, por lo que es un factor multiplicativo un tanto arbitrario, pongo 1000, también en la derivada
@@ -261,7 +261,7 @@ begin
       Action_PID:=-32768;
     end;
 
-    Form10.dac_set(OutPID_DAC,Action_PID, nil);
+    DataAdcquisitionForm.dac_set(OutPID_DAC,Action_PID, nil);
     prevError:=thisError;
     i:=i+1;
   end;

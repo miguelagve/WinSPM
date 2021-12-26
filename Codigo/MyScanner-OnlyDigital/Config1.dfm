@@ -59,14 +59,14 @@ object ConfigForm: TConfigForm
     object Label6: TLabel
       Left = 200
       Top = 20
-      Width = 90
+      Width = 84
       Height = 13
       Caption = 'Calibration (nm/V)'
     end
     object Label7: TLabel
       Left = 104
       Top = 20
-      Width = 42
+      Width = 39
       Height = 13
       Caption = 'Amplifier'
     end
@@ -80,7 +80,7 @@ object ConfigForm: TConfigForm
     object Label11: TLabel
       Left = 200
       Top = 44
-      Width = 90
+      Width = 84
       Height = 13
       Caption = 'Calibration (nm/V)'
       Color = clBtnFace
@@ -260,7 +260,7 @@ object ConfigForm: TConfigForm
       Caption = 'Amplifier'
     end
     object Label13: TLabel
-      Left = 236
+      Left = 240
       Top = 28
       Width = 84
       Height = 13
@@ -281,7 +281,7 @@ object ConfigForm: TConfigForm
       Caption = 'Amplifier 10^'
     end
     object Label18: TLabel
-      Left = 256
+      Left = 240
       Top = 60
       Width = 41
       Height = 13
@@ -302,7 +302,7 @@ object ConfigForm: TConfigForm
       Caption = 'Amplifier 10^'
     end
     object Label24: TLabel
-      Left = 256
+      Left = 240
       Top = 92
       Width = 41
       Height = 13
@@ -342,7 +342,7 @@ object ConfigForm: TConfigForm
     object Edit3: TEdit
       Left = 330
       Top = 24
-      Width = 33
+      Width = 32
       Height = 21
       Alignment = taCenter
       TabOrder = 3
@@ -386,9 +386,9 @@ object ConfigForm: TConfigForm
         '4')
     end
     object Edit4: TEdit
-      Left = 314
+      Left = 290
       Top = 56
-      Width = 49
+      Width = 32
       Height = 21
       Alignment = taCenter
       TabOrder = 7
@@ -433,9 +433,9 @@ object ConfigForm: TConfigForm
         '0')
     end
     object Edit5: TEdit
-      Left = 314
+      Left = 290
       Top = 88
-      Width = 49
+      Width = 32
       Height = 21
       Alignment = taCenter
       TabOrder = 11

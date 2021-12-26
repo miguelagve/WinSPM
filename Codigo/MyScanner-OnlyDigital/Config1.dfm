@@ -2,8 +2,8 @@ object ConfigForm: TConfigForm
   Left = 119
   Top = 228
   Caption = 'WinSPMConfig'
-  ClientHeight = 375
-  ClientWidth = 437
+  ClientHeight = 330
+  ClientWidth = 400
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,29 +15,15 @@ object ConfigForm: TConfigForm
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Label8: TLabel
-    Left = 120
-    Top = 56
-    Width = 39
-    Height = 13
-    Caption = 'Amplifier'
-  end
-  object Label9: TLabel
-    Left = 216
-    Top = 56
-    Width = 84
-    Height = 13
-    Caption = 'Calibration (nm/V)'
-  end
   object Panel1: TPanel
     Left = 16
     Top = 8
-    Width = 361
+    Width = 370
     Height = 145
     TabOrder = 0
     object Label1: TLabel
       Left = 8
-      Top = 8
+      Top = 4
       Width = 25
       Height = 13
       Caption = 'Scan'
@@ -51,7 +37,7 @@ object ConfigForm: TConfigForm
     end
     object Label3: TLabel
       Left = 8
-      Top = 48
+      Top = 44
       Width = 7
       Height = 13
       Caption = 'Y'
@@ -65,70 +51,72 @@ object ConfigForm: TConfigForm
     end
     object Label5: TLabel
       Left = 24
-      Top = 48
+      Top = 44
       Width = 22
       Height = 13
       Caption = 'DAC'
     end
     object Label6: TLabel
       Left = 200
-      Top = 24
-      Width = 84
+      Top = 20
+      Width = 90
       Height = 13
       Caption = 'Calibration (nm/V)'
     end
     object Label7: TLabel
       Left = 104
-      Top = 24
-      Width = 39
+      Top = 20
+      Width = 42
       Height = 13
       Caption = 'Amplifier'
     end
     object Label10: TLabel
       Left = 104
-      Top = 48
+      Top = 44
       Width = 39
       Height = 13
       Caption = 'Amplifier'
     end
     object Label11: TLabel
       Left = 200
-      Top = 48
-      Width = 84
+      Top = 44
+      Width = 90
       Height = 13
       Caption = 'Calibration (nm/V)'
+      Color = clBtnFace
+      ParentColor = False
     end
     object Label19: TLabel
       Left = 8
-      Top = 80
+      Top = 75
       Width = 37
       Height = 13
       Caption = 'Position'
     end
     object Label20: TLabel
       Left = 8
-      Top = 96
+      Top = 94
       Width = 32
       Height = 13
       Caption = 'X DAC'
     end
     object Label21: TLabel
       Left = 8
-      Top = 112
+      Top = 118
       Width = 32
       Height = 13
       Caption = 'Y DAC'
     end
     object Label25: TLabel
       Left = 104
-      Top = 96
+      Top = 94
       Width = 39
       Height = 13
       Caption = 'Amplifier'
     end
     object Label26: TLabel
       Left = 104
-      Top = 120
+      Top = 118
       Width = 39
       Height = 13
       Caption = 'Amplifier'
@@ -145,7 +133,7 @@ object ConfigForm: TConfigForm
     end
     object SpinEdit2: TSpinEdit
       Left = 56
-      Top = 48
+      Top = 40
       Width = 33
       Height = 22
       MaxValue = 7
@@ -158,6 +146,7 @@ object ConfigForm: TConfigForm
       Top = 16
       Width = 41
       Height = 21
+      Alignment = taCenter
       TabOrder = 2
       Text = '5'
     end
@@ -174,7 +163,7 @@ object ConfigForm: TConfigForm
     end
     object SpinEdit6: TSpinEdit
       Left = 56
-      Top = 88
+      Top = 90
       Width = 33
       Height = 22
       MaxValue = 7
@@ -184,7 +173,7 @@ object ConfigForm: TConfigForm
     end
     object SpinEdit7: TSpinEdit
       Left = 56
-      Top = 112
+      Top = 114
       Width = 33
       Height = 22
       MaxValue = 7
@@ -194,7 +183,7 @@ object ConfigForm: TConfigForm
     end
     object chkAttenuator: TCheckBox
       Left = 104
-      Top = 64
+      Top = 67
       Width = 105
       Height = 13
       Caption = 'Scan attenuator'
@@ -202,7 +191,7 @@ object ConfigForm: TConfigForm
     end
     object ComboBox6: TComboBox
       Left = 152
-      Top = 88
+      Top = 90
       Width = 41
       Height = 21
       TabOrder = 8
@@ -213,7 +202,7 @@ object ConfigForm: TConfigForm
     end
     object ComboBox7: TComboBox
       Left = 152
-      Top = 112
+      Top = 114
       Width = 41
       Height = 21
       TabOrder = 10
@@ -238,6 +227,7 @@ object ConfigForm: TConfigForm
       Top = 40
       Width = 41
       Height = 21
+      Alignment = taCenter
       TabOrder = 5
       Text = '5'
     end
@@ -245,82 +235,82 @@ object ConfigForm: TConfigForm
   object Panel2: TPanel
     Left = 16
     Top = 160
-    Width = 361
+    Width = 370
     Height = 161
     TabOrder = 1
     object Label12: TLabel
       Left = 8
-      Top = 8
+      Top = 6
       Width = 26
       Height = 13
       Caption = 'Read'
     end
     object Label14: TLabel
-      Left = 64
-      Top = 24
+      Left = 66
+      Top = 28
       Width = 22
       Height = 13
       Caption = 'ADC'
     end
     object Label15: TLabel
-      Left = 152
-      Top = 24
+      Left = 146
+      Top = 28
       Width = 39
       Height = 13
       Caption = 'Amplifier'
     end
     object Label13: TLabel
-      Left = 240
-      Top = 24
+      Left = 236
+      Top = 28
       Width = 84
       Height = 13
       Caption = 'Calibration (nm/V)'
     end
     object Label16: TLabel
-      Left = 72
-      Top = 56
+      Left = 66
+      Top = 60
       Width = 22
       Height = 13
       Caption = 'ADC'
     end
     object Label17: TLabel
-      Left = 136
-      Top = 56
+      Left = 130
+      Top = 60
       Width = 60
       Height = 13
       Caption = 'Amplifier 10^'
     end
     object Label18: TLabel
-      Left = 248
-      Top = 56
+      Left = 256
+      Top = 60
       Width = 41
       Height = 13
       Caption = 'Multiplier'
     end
     object Label22: TLabel
-      Left = 64
-      Top = 88
+      Left = 66
+      Top = 92
       Width = 22
       Height = 13
       Caption = 'ADC'
     end
     object Label23: TLabel
-      Left = 136
-      Top = 88
+      Left = 130
+      Top = 92
       Width = 60
       Height = 13
       Caption = 'Amplifier 10^'
     end
     object Label24: TLabel
-      Left = 248
-      Top = 88
+      Left = 256
+      Top = 92
       Width = 41
       Height = 13
       Caption = 'Multiplier'
     end
     object SpinEdit3: TSpinEdit
-      Left = 88
-      Top = 16
+      Left = 92
+      Top = 24
       Width = 33
       Height = 22
       MaxValue = 5
@@ -329,8 +319,8 @@ object ConfigForm: TConfigForm
       Value = 2
     end
     object ComboBox3: TComboBox
-      Left = 200
-      Top = 16
+      Left = 192
+      Top = 24
       Width = 41
       Height = 21
       TabOrder = 2
@@ -341,7 +331,7 @@ object ConfigForm: TConfigForm
     end
     object CheckBox1: TCheckBox
       Left = 8
-      Top = 24
+      Top = 27
       Width = 49
       Height = 17
       Caption = 'Topo'
@@ -350,16 +340,17 @@ object ConfigForm: TConfigForm
       TabOrder = 0
     end
     object Edit3: TEdit
-      Left = 320
-      Top = 16
+      Left = 330
+      Top = 24
       Width = 33
       Height = 21
+      Alignment = taCenter
       TabOrder = 3
       Text = '1'
     end
     object CheckBox2: TCheckBox
       Left = 8
-      Top = 56
+      Top = 58
       Width = 57
       Height = 17
       Caption = 'Current'
@@ -368,8 +359,8 @@ object ConfigForm: TConfigForm
       TabOrder = 4
     end
     object SpinEdit4: TSpinEdit
-      Left = 96
-      Top = 48
+      Left = 92
+      Top = 56
       Width = 33
       Height = 22
       MaxValue = 5
@@ -378,8 +369,8 @@ object ConfigForm: TConfigForm
       Value = 0
     end
     object ComboBox4: TComboBox
-      Left = 200
-      Top = 48
+      Left = 192
+      Top = 56
       Width = 41
       Height = 21
       ItemIndex = 2
@@ -395,24 +386,25 @@ object ConfigForm: TConfigForm
         '4')
     end
     object Edit4: TEdit
-      Left = 304
-      Top = 48
+      Left = 314
+      Top = 56
       Width = 49
       Height = 21
+      Alignment = taCenter
       TabOrder = 7
       Text = '-1'
     end
     object CheckBox3: TCheckBox
       Left = 8
-      Top = 88
+      Top = 90
       Width = 49
       Height = 17
       Caption = 'Other'
       TabOrder = 8
     end
     object SpinEdit5: TSpinEdit
-      Left = 96
-      Top = 80
+      Left = 92
+      Top = 88
       Width = 33
       Height = 22
       MaxValue = 5
@@ -421,8 +413,8 @@ object ConfigForm: TConfigForm
       Value = 1
     end
     object ComboBox5: TComboBox
-      Left = 200
-      Top = 80
+      Left = 192
+      Top = 88
       Width = 41
       Height = 21
       TabOrder = 10
@@ -441,16 +433,17 @@ object ConfigForm: TConfigForm
         '0')
     end
     object Edit5: TEdit
-      Left = 304
-      Top = 80
+      Left = 314
+      Top = 88
       Width = 49
       Height = 21
+      Alignment = taCenter
       TabOrder = 11
       Text = '1'
     end
     object CheckBox4: TCheckBox
       Left = 8
-      Top = 120
+      Top = 125
       Width = 73
       Height = 17
       Caption = 'MakeIV'

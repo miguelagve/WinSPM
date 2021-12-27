@@ -135,7 +135,7 @@ var I: Integer;
 begin
   Result:= '';
   for I := 1 to length (H) div 2 do
-    Result:= Result+AnsiChar(StrToInt('$'+Copy(H,(I-1)*2+1,2)));
+    Result:= Result+AnsiChar(StrToInt( String('$'+Copy(H,(I-1)*2+1,2)) ));
 end;
 
 // HexToBuffer
@@ -148,7 +148,7 @@ var I: Integer;
 begin
   Result:= 0;
   for I := 1 to length (H) div 2 do
-    destBuffer[i] := uint8(StrToInt('$'+Copy(H,(I-1)*2+1,2)));
+    destBuffer[i] := uint8(StrToInt(String('$'+Copy(H,(I-1)*2+1,2))));
 end;
 
 
@@ -181,7 +181,7 @@ begin
 
  SPI_GetHiSpeedDeviceNameLocIDChannel(0, @nameBuffer, 50, @LocationID, @channelBuffer, 50, @DeviceType);
  SPI_Ret := SPI_OpenHiSpeedDevice(nameBuffer, LocationID, channelBuffer, @SPI_Hdl) ;
- Str( SPI_Ret, sTexto );
+ sTexto := IntToStr(SPI_Ret);// Str( SPI_Ret, sTexto );
 
  SupraSPI_Hdl:=  SPI_Hdl;
 
@@ -193,7 +193,7 @@ begin
  // else  MessageDlg('Abierto correctamente', mtError, [mbOk], 0);
 
  SPI_Ret :=  SPI_InitDevice(SPI_Hdl, 2); // Con los retardos que hay ahora en los ADCs podría funcionar con 0 e ir más rápido
- Str(SPI_Ret, sTexto);
+ sTexto := IntToStr(SPI_Ret);// Str(SPI_Ret, sTexto);
 
  If SPI_Ret <> 0  then
  begin
@@ -205,10 +205,10 @@ begin
  FT_ResetDevice(SPI_Hdl);
 
  SPI_Ret := FT_SetChars(SPI_Hdl, AnsiChar(0), AnsiChar(0), AnsiChar(0), AnsiChar(0));
- Str( SPI_Ret, sTexto );
+ sTexto := IntToStr(SPI_Ret);// Str( SPI_Ret, sTexto );
 
  SPI_Ret := SPI_SetDeviceLatencyTimer  (SPI_Hdl,2);
- Str( SPI_Ret, sTexto );
+ sTexto := IntToStr(SPI_Ret);// Str( SPI_Ret, sTexto );
 
  If SPI_Ret <> 0 then
  begin
@@ -239,7 +239,7 @@ begin
 
 
  SPI_Ret :=  SPI_SetHiSpeedDeviceGPIOs (  SPI_Hdl, @miestructura2,  @entradassalidas);
- Str( SPI_Ret, sTexto );
+ sTexto := IntToStr(SPI_Ret);// Str( SPI_Ret, sTexto );
 
  If SPI_Ret <> 0 then
  begin
@@ -389,7 +389,7 @@ begin
 
  Str( ndac, sTexto );
  Str( valor, sTexto2 );
-if TRAZAS then MessageDlg('DAC Set numero de dac:'+Stexto+ 'valor:'+sTexto2, mtError, [mbOk], 0);
+if TRAZAS then MessageDlg('DAC Set numero de dac:'+ String(Stexto) + 'valor:'+ String(sTexto2), mtError, [mbOk], 0);
 
   Result:=i;
 
@@ -412,7 +412,7 @@ var ReceivesBytes:Integer;
 var FT_In_Buffer: array [0..14] of Byte; //En ppio. tamaño suficiente para esta versión
 var BytesReturned:Integer;
 var numres:longint;
-var resultadoooo:extended;
+var resultadoooo:extended; //Necesitamos la precision extra comparado con double? En 64bit es lo mismo que un double
 var i:integer;
 var datosum: double ;
 var f : double ;
@@ -469,7 +469,7 @@ if (n<1) or (chn<0) or (chn>5)  then Exit ;
 
     if (ReceivesBytes <> BytesToReceive) then
     begin
-      Str( ReceivesBytes, sTexto );
+      sTexto := IntToStr(ReceivesBytes);//Str( ReceivesBytes, sTexto );
       OutputDebugString(PChar('ADC_take Recibidos: ' + sTexto));
     end;
 
@@ -485,8 +485,8 @@ if (n<1) or (chn<0) or (chn>5)  then Exit ;
    if  numres > $7FFF             then    numres:=numres - $10000;      //Conversión (condicional) a nºs negativos
    resultadoooo:=numres/$8000;
 
-  Str( resultadoooo, sTexto2 );
-  Str( n, sTexto3 );
+  sTexto2:= FloatToStr(resultadoooo); //Str( resultadoooo, sTexto2 );
+  sTexto3 := IntToStr(n);// Str( n, sTexto3 );
 
  if TRAZAS then   MessageDlg('El valor es :'+Stexto2+ 'y n es:'+sTexto3, mtError, [mbOk], 0);
 
@@ -495,15 +495,15 @@ if (n<1) or (chn<0) or (chn>5)  then Exit ;
  end;   // Del for
 
   f:=datosum/n ;
-  Str( f, sTexto2 );
+  sTexto2:= FloatToStr(f); //Str( f, sTexto2 );
   if TRAZAS then   MessageDlg('El valor medio es :'+Stexto2, mtError, [mbOk], 0);
   Result:=f;
 
 
 //////////////////////////// fin normal
- Str( chn, sTexto );
- Str( mux, sTexto2 );
- Str( n, sTexto3 );
+ sTexto := IntToStr(chn);//Str( chn, sTexto );
+ sTexto2 := IntToStr(mux);//Str( mux, sTexto2 );
+ sTexto3 := IntToStr(n);//Str( n, sTexto3 );
 
 if TRAZAS then  MessageDlg('ADC TAKE chn:'+Stexto+ 'mux:'+sTexto2+'n:' +sTexto3, mtError, [mbOk], 0);
 
@@ -641,7 +641,7 @@ begin
       begin
         if (ReceivesBytes <> BytesToReceive) then
         begin
-          Str( ReceivesBytes, sTexto );
+          sTexto := IntToStr(SPI_Ret);//Str( ReceivesBytes, sTexto );
           OutputDebugString(PChar('Recibidos: ' + sTexto));
         end;
         SPI_Ret := FT_Read(SupraSPI_Hdl, @FT_In_Buffer, ReceivesBytes, @BytesReturned);
@@ -674,8 +674,8 @@ begin
     for j := 0 to NUM_ADCs-1 do
     begin
       f:=datosum[j]/n ;
-      Str( j, sTexto );
-      Str( f, sTexto2 );
+      sTexto := IntToStr(j);//Str( j, sTexto );
+      sTexto2:= FloatToStr(f); //Str( f, sTexto2 );
       if TRAZAS then MessageDlg('El valor medio del canal '+Stexto+' es :'+Stexto2, mtError, [mbOk], 0);
       Result[j]:=f;
     end;

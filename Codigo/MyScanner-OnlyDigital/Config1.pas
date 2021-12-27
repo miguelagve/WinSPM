@@ -131,9 +131,9 @@ ScanForm.TrackBar3Change(self);
 // Leemos los datos del fichero de configuración
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
-  IniFile.WriteInteger(iniTitle, 'XScanDac', SpinEdit1.Value);
-  IniFile.WriteInteger(iniTitle, 'YScanDac', SpinEdit2.Value);
-  IniFile.WriteString(iniTitle, 'XAmplifier', Combobox1.Text);
+  IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
+  IniFile.WriteString(String(iniTitle), 'XAmplifier', Combobox1.Text);
 finally
   IniFile.Free;
 end;
@@ -146,9 +146,9 @@ begin
 iniTitle := 'Channels';
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
-  SpinEdit1.Value := IniFile.ReadInteger(iniTitle, 'XScanDac', 0);
-  SpinEdit2.Value := IniFile.ReadInteger(iniTitle, 'YScanDac', 5);
-  Combobox1.Text := IniFile.ReadString(iniTitle, 'XAmplifier', '13');
+  SpinEdit1.Value := IniFile.ReadInteger(String(iniTitle), 'XScanDac', 0);
+  SpinEdit2.Value := IniFile.ReadInteger(String(iniTitle), 'YScanDac', 5);
+  Combobox1.Text := IniFile.ReadString(String(iniTitle), 'XAmplifier', '13');
 finally
   IniFile.Free;
 end;

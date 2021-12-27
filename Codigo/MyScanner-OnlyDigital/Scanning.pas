@@ -279,7 +279,7 @@ end;
 
 procedure TScanningForm.FormShow(Sender: TObject);
 begin
-  ChartLine.LeftAxis.AxisValuesFormat := '0.##E+###';
+  ChartLine.LeftAxis.AxisValuesFormat := '0.####E+0';
   Button7Click(nil);
 end;
 

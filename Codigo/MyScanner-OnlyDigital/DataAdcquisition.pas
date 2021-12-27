@@ -387,7 +387,7 @@ begin
 //////////////////////Fin normal//////////////
 
 
- Str( ndac, sTexto );
+ Str( ndac, sTexto ); //En este caso podemos usar Str() porque es AnsiString y no se produce una conversion
  Str( valor, sTexto2 );
 if TRAZAS then MessageDlg('DAC Set numero de dac:'+ String(Stexto) + 'valor:'+ String(sTexto2), mtError, [mbOk], 0);
 

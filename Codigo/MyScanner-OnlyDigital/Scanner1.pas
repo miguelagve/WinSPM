@@ -1263,7 +1263,7 @@ begin
   MiFile:=FileForm.Label5.Caption; //Here is directory
 
   FileNumber := Format('%.3d', [SpinEdit1.Value]);
-  MiFile:=MiFile+'\'+Edit1.Text+Suffix+FileNumber+'.stp';
+  MiFile:=MiFile+'\'+Edit1.Text+'_'+FileNumber+Suffix+'.stp';
 
   F:=TFileStream.Create(MiFile,fmCreate) ;
   F.WriteBuffer(HeaderImgForm.WSxMHeader[1], Length(HeaderImgForm.WSxMHeader));
@@ -1464,7 +1464,7 @@ begin
   end;
   HeaderImgForm.RadioGroup1.ItemIndex:=0;
   HeaderImgForm.RadioGroup2.ItemIndex:=0;
-  SaveSTP(nil,OneImg,'_ih_', factorZ);
+  SaveSTP(nil,OneImg,'_ih', factorZ);
 
   for i:=0 to h.yn-1 do
   begin
@@ -1475,7 +1475,7 @@ begin
   end;
   HeaderImgForm.RadioGroup1.ItemIndex:=1;
   HeaderImgForm.RadioGroup2.ItemIndex:=0;
-  SaveSTP(nil,OneImg,'_vh_', factorZ);
+  SaveSTP(nil,OneImg,'_vh', factorZ);
 end;
 
 if ReadCurrent=True then
@@ -1490,7 +1490,7 @@ begin
   end;
   HeaderImgForm.RadioGroup1.ItemIndex:=0;
   HeaderImgForm.RadioGroup2.ItemIndex:=1;
-  SaveSTP(nil,OneImg,'_ic_', factorZ);
+  SaveSTP(nil,OneImg,'_ic', factorZ);
 
   for i:=0 to h.yn-1 do
   begin
@@ -1501,7 +1501,7 @@ begin
   end;
   HeaderImgForm.RadioGroup1.ItemIndex:=1;
   HeaderImgForm.RadioGroup2.ItemIndex:=1;
-  SaveSTP(nil,OneImg,'_vc_', factorZ);
+  SaveSTP(nil,OneImg,'_vc', factorZ);
 
 // Se usa la misma condición que controla si se hacen IVs y aparte, que se quieran guardar los datos en este formato
 if (CheckBox2.Checked) and (Config_IVForm.CheckBox1.Checked) and (Config_IVForm.chkSaveAsWSxM.Checked) then

@@ -1,7 +1,7 @@
 unit var_gbl;
 
 interface
-uses Windows, Graphics, SysUtils;
+uses Windows, Graphics, SysUtils, AnsiStrings;
 
 const
 ldatos = 2048;
@@ -338,17 +338,17 @@ signo_lect : array [0..2] of integer;
   FPalette : array [0..511,0..2] of byte ;
 
 
-function MyFormat(const FormatStr: string; const Args: array of const): AnsiString;
+function MyFormat(const FormatStr: Ansistring; const Args: array of const): AnsiString;
 
 
 implementation
 
-function MyFormat(const FormatStr: string; const Args: array of const): AnsiString;
+function MyFormat(const FormatStr: AnsiString; const Args: array of const): AnsiString;
 begin
 {$IfDef VER150}
-  Format(FormatStr, Args);
+  MyFormat:=Format(FormatStr, Args);
 {$Else}
-  Format(FormatStr, Args, TFormatSettings.Invariant);
+  MyFormat:=AnsiStrings.Format(FormatStr, Args, TFormatSettings.Invariant);
 {$EndIf}
 end;
 

@@ -94,9 +94,9 @@ begin
   WSxMHeader := WSxMHeader+strLine+#13#10;
 
   WSxMHeader := WSxMHeader+#13#10+
-        '[General Info]'#13#10+
+        '[General Info]'+#13#10+
         #13#10+
-        '    Image Data Type: double'#13#10;
+        '    Image Data Type: double'+#13#10;
 
   strLine := MyFormat('    Number of columns: %d', [ScanForm.P_Scan_Lines]);
   WSxMHeader := WSxMHeader+strLine+#13#10;
@@ -109,13 +109,13 @@ begin
 
   WSxMHeader := WSxMHeader+
         #13#10+
-        '[Miscellaneous]'#13#10+
+        '[Miscellaneous]'+#13#10+
         #13#10+
         '    Comments: '+AnsiString(Edit1.Text)+MyComments+#13#10+
-        '    Saved with version: MyScanner 1.302'#13#10+
-        '    Version: 1.0 (August 2005)'#13#10+
-        '    Z Scale Factor: 1'#13#10+
-        '    Z Scale Offset: 0'#13#10+
+        '    Saved with version: MyScanner 1.302'+#13#10+
+        '    Version: 1.0 (August 2005)'+#13#10+
+        '    Z Scale Factor: 1'+#13#10+
+        '    Z Scale Offset: 0'+#13#10+
         #13#10 +
         '[Header end]'+
         #13#10;

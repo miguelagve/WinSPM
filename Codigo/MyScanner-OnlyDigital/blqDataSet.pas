@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Tipos;
+  Tipos, AnsiStrings;
 
 type
   TblqDataSetForm = class(TForm)
@@ -346,6 +346,7 @@ type
   TSmallInt_array = array [0..65535] of SmallInt ;
   TShortInt_array = array [0..65535] of ShortInt ;
 var
+  i : integer ;
   j : integer ;
   data_single : ^Tsingle_array ;
   data_double : ^TDouble_array ;
@@ -465,13 +466,13 @@ begin
   // CABECERA GENERAL
   h.V0:=$4444 ; h.V1:=1 ; h.V2:=0 ; h.V3:=0 ;
   for i:=0 to 31 do h.Name[i]:=#0 ;
-  strcopy(h.Name,PAnsiChar(DS.Name)) ;
+  AnsiStrings.strcopy(h.Name,PAnsiChar(DS.Name)) ;
   h.NCols:=DS.NCols ;
   h.NRows:=DS.NRows ;
   h.Moment:=DS.Moment ;
   h.Time:=DS.Time ;
   for i:=0 to 127 do h.Comment[i]:=#0 ;
-  strcopy(h.Comment,PAnsiChar(DS.Comment)) ;
+  AnsiStrings.strcopy(h.Comment,PAnsiChar(DS.Comment)) ;
   h.User:=1 ;
   for i:=0 to 99 do h.UserReserved[i]:=0 ;
   h.Unid:=1 ;

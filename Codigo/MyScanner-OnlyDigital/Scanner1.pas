@@ -109,7 +109,7 @@ type
     procedure ResizeBitmap(Bitmap: TBitmap; Width, Height: Integer; Background: TColor);
     procedure Button7Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
-    procedure Update(Sender:TObject);
+    procedure UpdateCanvas(Sender:TObject);
     procedure SetCanvasZoomFactor(Canvas: TCanvas; AZoomFactor: Integer);
     procedure Button17Click(Sender: TObject);
     procedure Button18Click(Sender: TObject);
@@ -255,7 +255,7 @@ FormPID.Show;
 
 // Hacemos un tip reset para asegurarnos de que la posición inicial es la central
 Button9Click(nil);
-Update(nil);
+UpdateCanvas(nil);
 end;
 
 procedure TScanForm.PaintBox1DblClick(Sender: TObject);
@@ -297,7 +297,7 @@ begin
   MoveDac(nil, YDAC_Pos, Princ, Fin, P_Scan_Jump, nil);
 
   DacvalY:=Fin;
-  Update(nil);
+  UpdateCanvas(nil);
 end;
 
 procedure TScanForm.TrackBar3Change(Sender: TObject);
@@ -308,7 +308,7 @@ Label8.Caption:=InttoStr(Trackbar3.Position);
 P_Scan_Size:=Trackbar3.Position/1000;
 Label30.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10,ffFixed,3,1);
 Label32.Caption:=FloattoStrF(65535*P_Scan_Size/32768*AmpX*DataAdcquisitionForm.attenuator*10*CalX,ffFixed,3,1);
-Update(nil);
+UpdateCanvas(nil);
 end;
 
 procedure TScanForm.TrackBar2Change(Sender: TObject);
@@ -382,7 +382,7 @@ end;
 
 procedure TScanForm.PaintBox1Paint(Sender: TObject);
 begin
-Update(nil);
+UpdateCanvas(nil);
 end;
 
 procedure TScanForm.ComboBox1Change(Sender: TObject);
@@ -420,7 +420,7 @@ begin
     ScrollBar2.Position := Round((oldPosY*zoomFactor/(zoomFactor-1)+1)*halfScrollSize)
   end;
 
-  Update(nil);
+  UpdateCanvas(nil);
 end;
 
 procedure TScanForm.ComboBox2Change(Sender: TObject);
@@ -1184,7 +1184,7 @@ repeat
            bitmapPasteList[i].bitmap.Canvas.CopyRect(Dest, ScanningForm.PaintBox1.Canvas, Source);
         finally
        end;
-       Update(self);
+       UpdateCanvas(self);
      end;
 
 
@@ -1745,7 +1745,7 @@ begin
   Result.Y := tempY;
 end;
 
-procedure TScanForm.Update(Sender:TObject);
+procedure TScanForm.UpdateCanvas(Sender:TObject);
 var
   i:Integer;
   bottomLeft, topRight: TPoint;
@@ -2033,7 +2033,7 @@ begin
       bitmapPasteList[i].bitmap := TBitmap.Create;
       bitmapPasteList[i].bitmap.Assign(Clipboard);
 
-      Update(Self);
+      UpdateCanvas(Self);
 
     except
         // Can't convert
@@ -2053,12 +2053,12 @@ end;
 
 procedure TScanForm.ScrollBar2Change(Sender: TObject);
 begin
-  Update(nil)
+  UpdateCanvas(nil)
 end;
 
 procedure TScanForm.ScrollBar3Change(Sender: TObject);
 begin
-  Update(nil)
+  UpdateCanvas(nil)
 end;
 
 procedure TScanForm.btnMarkNowClick(Sender: TObject);
@@ -2085,7 +2085,7 @@ begin
   bitmapPasteList[i].bitmap.Canvas.Brush.Color := $00C0C0;
   bitmapPasteList[i].bitmap.Canvas.FillRect(Rect(0, 0, 1, 1));}
 
-  Update(self);
+  UpdateCanvas(self);
 end;
 
 procedure TScanForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -2118,7 +2118,7 @@ begin
   ScrollBar3.Position := Round((scrollX+1)*halfScollRange);
   ScrollBar2.Position := Round((scrollY+1)*halfScollRange);
 
-  Update(nil);
+  UpdateCanvas(nil);
 end;
 
 procedure TScanForm.Button15Click(Sender: TObject);
@@ -2146,7 +2146,7 @@ begin
   bitmapPasteList[i].bitmap.Canvas.Brush.Color := $00C0C0;
   bitmapPasteList[i].bitmap.Canvas.FillRect(Rect(0, 0, 1, 1));}
 
-  Update(self);
+  UpdateCanvas(self);
 end;
 
 //procedure TScanForm.SpinEdit3Change(Sender: TObject);

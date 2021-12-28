@@ -1,7 +1,7 @@
 unit D2XXUnit;
 
 interface
-Uses Windows,Forms,Dialogs;
+Uses Windows,Forms,Dialogs,System.UITypes;
 
 Type FT_Result = Integer;
 

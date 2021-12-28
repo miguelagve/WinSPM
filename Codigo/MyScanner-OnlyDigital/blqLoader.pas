@@ -286,6 +286,7 @@ end ;
 
 function TblqLoader.SelectNextEntries(inc:Integer) :  Boolean ;
 var
+  i : Integer ;
   Entry : TBlockEntry ;
   indices : array [0..1023] of integer ;
 begin

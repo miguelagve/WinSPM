@@ -9,7 +9,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, {xyyGraph,} var_gbl, Spin, Math, ClipBrd, jpeg,
-  AnsiStrings, Paste, Series, UITypes;
+  AnsiStrings, Paste, Series, UITypes, Vcl.Buttons;
 
 type
   TCitsIV = array of single;        // Cada rampa de una IV
@@ -69,8 +69,9 @@ type
     ScrollBar2: TScrollBar;
     ScrollBar3: TScrollBar;
     btnCenterAtTip: TButton;
-    Button9: TButton;
     Button15: TButton;
+    Button9: TSpeedButton;
+    Panel3: TPanel;
     procedure Button4Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure PaintBox1DblClick(Sender: TObject);

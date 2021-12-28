@@ -101,21 +101,6 @@ object ScanningForm: TScanningForm
       ParentColor = False
     end
   end
-  object Button1: TButton
-    Left = 6
-    Top = 40
-    Width = 75
-    Height = 25
-    Caption = 'STOP'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'MS Sans Serif'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 2
-    OnClick = Button1Click
-  end
   object RadioGroup1: TRadioGroup
     Left = 15
     Top = 312
@@ -126,7 +111,7 @@ object ScanningForm: TScanningForm
     Items.Strings = (
       'Topo'
       'Current')
-    TabOrder = 3
+    TabOrder = 2
   end
   object SpinEdit1: TSpinEdit
     Left = 15
@@ -135,7 +120,7 @@ object ScanningForm: TScanningForm
     Height = 22
     MaxValue = 100
     MinValue = 0
-    TabOrder = 4
+    TabOrder = 3
     Value = 2
   end
   object Button2: TButton
@@ -150,7 +135,7 @@ object ScanningForm: TScanningForm
     Font.Name = 'MS Sans Serif'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 4
     OnClick = Button2Click
   end
   object Button3: TButton
@@ -159,7 +144,7 @@ object ScanningForm: TScanningForm
     Width = 65
     Height = 25
     Caption = 'IN'
-    TabOrder = 6
+    TabOrder = 5
     Visible = False
     OnClick = Button3Click
   end
@@ -169,7 +154,7 @@ object ScanningForm: TScanningForm
     Width = 65
     Height = 25
     Caption = 'OUT'
-    TabOrder = 7
+    TabOrder = 6
     Visible = False
     OnClick = Button4Click
   end
@@ -179,7 +164,7 @@ object ScanningForm: TScanningForm
     Width = 65
     Height = 25
     Caption = 'UP'
-    TabOrder = 8
+    TabOrder = 7
     Visible = False
     OnClick = Button5Click
   end
@@ -189,7 +174,7 @@ object ScanningForm: TScanningForm
     Width = 65
     Height = 25
     Caption = 'DOWN'
-    TabOrder = 9
+    TabOrder = 8
     Visible = False
     OnClick = Button6Click
   end
@@ -199,7 +184,7 @@ object ScanningForm: TScanningForm
     Width = 66
     Height = 25
     Caption = 'RESET'
-    TabOrder = 10
+    TabOrder = 9
     Visible = False
     OnClick = Button7Click
   end
@@ -215,7 +200,7 @@ object ScanningForm: TScanningForm
     Position = 1
     SelEnd = 100
     SelStart = 1
-    TabOrder = 11
+    TabOrder = 10
     TickStyle = tsNone
     OnChange = TrackBar1Change
   end
@@ -231,7 +216,7 @@ object ScanningForm: TScanningForm
     Position = 2
     SelEnd = 100
     SelStart = 1
-    TabOrder = 12
+    TabOrder = 11
     TickStyle = tsNone
     OnChange = TrackBar2Change
   end
@@ -241,7 +226,7 @@ object ScanningForm: TScanningForm
     Width = 73
     Height = 17
     Caption = 'Scan Loop'
-    TabOrder = 14
+    TabOrder = 13
   end
   object CheckBox2: TCheckBox
     Left = 552
@@ -249,7 +234,7 @@ object ScanningForm: TScanningForm
     Width = 137
     Height = 17
     Caption = 'Separate when finished'
-    TabOrder = 13
+    TabOrder = 12
   end
   object ChartLine: TChart
     Left = 84
@@ -281,7 +266,7 @@ object ScanningForm: TScanningForm
     View3D = False
     Zoom.Animated = True
     Color = clWhite
-    TabOrder = 15
+    TabOrder = 14
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
   end
@@ -293,7 +278,7 @@ object ScanningForm: TScanningForm
     Caption = 'Flatten'
     Checked = True
     State = cbChecked
-    TabOrder = 16
+    TabOrder = 15
   end
   object CheckBox3: TCheckBox
     Left = 208
@@ -301,7 +286,7 @@ object ScanningForm: TScanningForm
     Width = 145
     Height = 17
     Caption = 'Show remaining time'
-    TabOrder = 17
+    TabOrder = 16
   end
   object trckbrZoom: TTrackBar
     Left = 752
@@ -314,7 +299,7 @@ object ScanningForm: TScanningForm
     Position = 1
     SelEnd = 100
     SelStart = 1
-    TabOrder = 18
+    TabOrder = 17
     TickStyle = tsNone
     OnChange = trckbrZoomChange
   end
@@ -328,7 +313,7 @@ object ScanningForm: TScanningForm
     PageSize = 10
     SelEnd = 100
     SelStart = -100
-    TabOrder = 19
+    TabOrder = 18
     TickStyle = tsNone
     OnChange = trckbrOffsetChange
   end
@@ -338,7 +323,34 @@ object ScanningForm: TScanningForm
     Width = 41
     Height = 41
     Caption = 'Reset'
-    TabOrder = 20
+    TabOrder = 19
     OnClick = btnResetZoomOffsetClick
+  end
+  object Panel1: TPanel
+    Left = 6
+    Top = 40
+    Width = 75
+    Height = 27
+    Color = clRed
+    ParentBackground = False
+    TabOrder = 20
+    object Button1: TSpeedButton
+      Left = 1
+      Top = 1
+      Width = 73
+      Height = 25
+      Align = alClient
+      Caption = 'STOP'
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = Button1Click
+      ExplicitWidth = 75
+      ExplicitHeight = 23
+    end
   end
 end

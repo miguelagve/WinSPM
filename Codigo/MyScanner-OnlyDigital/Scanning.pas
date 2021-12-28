@@ -7,7 +7,7 @@ uses
   StdCtrls, ExtCtrls, {xyyGraph,} var_gbl, Spin, ComCtrls, Chart, Series,
   TeeProcs, TeEngine
 {$ifndef VER150}
-  , VclTee.TeeGDIPlus
+  , VclTee.TeeGDIPlus, Vcl.Buttons
 {$EndIf}
   ;
 
@@ -15,7 +15,7 @@ type
   TScanningForm = class(TForm)
     ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
-    Button1: TButton;
+    Button1: TSpeedButton;
     RadioGroup1: TRadioGroup;
     PaintBox1: TPaintBox;
     PaintBox2: TPaintBox;
@@ -45,6 +45,7 @@ type
     lblOffset: TLabel;
     trckbrOffset: TTrackBar;
     btnResetZoomOffset: TButton;
+    Panel1: TPanel;
     procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);

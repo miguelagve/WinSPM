@@ -260,22 +260,22 @@ end;
 
 procedure TScanningForm.Button3Click(Sender: TObject);
 begin
-  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum/2,ChartLine.LeftAxis.Maximum/2);
+  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum+(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum)/4,ChartLine.LeftAxis.Maximum-(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum)/4);
 end;
 
 procedure TScanningForm.Button4Click(Sender: TObject);
 begin
-  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum*2, ChartLine.LeftAxis.Maximum*2);
+  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum-(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum)/2,ChartLine.LeftAxis.Maximum+(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum)/2);
 end;
 
 procedure TScanningForm.Button5Click(Sender: TObject);
 begin
-  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum-0.05, ChartLine.LeftAxis.Maximum-0.05);
+  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum-0.1*(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum), ChartLine.LeftAxis.Maximum-0.1*(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum));
 end;
 
 procedure TScanningForm.Button6Click(Sender: TObject);
 begin
-  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum+0.05, ChartLine.LeftAxis.Maximum+0.05);
+  ChartLine.LeftAxis.SetMinMax(ChartLine.LeftAxis.Minimum+0.1*(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum), ChartLine.LeftAxis.Maximum+0.1*(ChartLine.LeftAxis.Maximum-ChartLine.LeftAxis.Minimum));
 end;
 
 procedure TScanningForm.FormShow(Sender: TObject);

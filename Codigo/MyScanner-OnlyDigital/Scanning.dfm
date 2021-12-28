@@ -139,8 +139,8 @@ object ScanningForm: TScanningForm
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 19
-    Top = 376
+    Left = 13
+    Top = 400
     Width = 65
     Height = 25
     Caption = 'IN'
@@ -149,8 +149,8 @@ object ScanningForm: TScanningForm
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 19
-    Top = 405
+    Left = 13
+    Top = 429
     Width = 65
     Height = 25
     Caption = 'OUT'
@@ -159,8 +159,8 @@ object ScanningForm: TScanningForm
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 19
-    Top = 443
+    Left = 13
+    Top = 467
     Width = 65
     Height = 25
     Caption = 'UP'
@@ -169,8 +169,8 @@ object ScanningForm: TScanningForm
     OnClick = Button5Click
   end
   object Button6: TButton
-    Left = 19
-    Top = 472
+    Left = 13
+    Top = 496
     Width = 65
     Height = 25
     Caption = 'DOWN'
@@ -179,8 +179,8 @@ object ScanningForm: TScanningForm
     OnClick = Button6Click
   end
   object Button7: TButton
-    Left = 18
-    Top = 512
+    Left = 12
+    Top = 536
     Width = 66
     Height = 25
     Caption = 'RESET'

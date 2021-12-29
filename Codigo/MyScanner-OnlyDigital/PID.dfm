@@ -1,9 +1,9 @@
 object FormPID: TFormPID
   Left = 748
   Top = 174
-  Width = 352
-  Height = 475
   Caption = 'WinPID'
+  ClientHeight = 436
+  ClientWidth = 336
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -2,7 +2,7 @@ object ConfigForm: TConfigForm
   Left = 119
   Top = 228
   Caption = 'WinSPMConfig'
-  ClientHeight = 357
+  ClientHeight = 360
   ClientWidth = 400
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,17 +15,18 @@ object ConfigForm: TConfigForm
   OnCreate = FormCreate
   DesignSize = (
     400
-    357)
+    360)
   PixelsPerInch = 96
   TextHeight = 13
   object SaveCfg: TSpeedButton
     Left = 150
-    Top = 325
+    Top = 328
     Width = 100
     Height = 25
     Anchors = []
     Caption = 'Save Config to File'
     OnClick = SaveCfgClick
+    ExplicitTop = 325
   end
   object Panel1: TPanel
     Left = 16

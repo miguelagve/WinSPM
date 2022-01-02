@@ -66,6 +66,7 @@ type
   private
     { Private declarations }
     IniFile: TIniFile;
+    MemFile: TMemIniFile;
     iniTitle: AnsiString; //No veo razon para usar ANSI. Es una cuestion de compatibilidad?
 //    const AnsiString iniTitle := 'Channels';
     iniLiner: AnsiString;
@@ -202,36 +203,38 @@ end;
 procedure TConfigForm.SaveCfgClick(Sender: TObject);
 begin
 // Guardamos los datos en el fichero de configuración
-IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
+//Podemos usar UTF8, pero con Ansi el archivo deberia funcionar con versiones anteriores sin modificaciones
+MemFile := TMemIniFile.Create(GetCurrentDir+'\Config.ini',TEncoding.ANSI);
 try
   //Parametros de barrido
-  IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
-  IniFile.WriteString(String(iniTitle), 'XYAmplifier', Combobox1.Text);
-  IniFile.WriteInteger(String(iniTitle), 'XPosDac', SpinEdit6.Value);
-  IniFile.WriteInteger(String(iniTitle), 'YPosDac', SpinEdit7.Value);
-  IniFile.WriteString(String(iniTitle), 'XYPosAmp', Combobox6.Text);
-  IniFile.WriteString(String(iniTitle), 'XYCalibration', Edit1.Text);
+  MemFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
+  MemFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
+  MemFile.WriteString(String(iniTitle), 'XYAmplifier', Combobox1.Text);
+  MemFile.WriteInteger(String(iniTitle), 'XPosDac', SpinEdit6.Value);
+  MemFile.WriteInteger(String(iniTitle), 'YPosDac', SpinEdit7.Value);
+  MemFile.WriteString(String(iniTitle), 'XYPosAmp', Combobox6.Text);
+  MemFile.WriteString(String(iniTitle), 'XYCalibration', Edit1.Text);
   //Parametros de topo y corriente
-  IniFile.WriteInteger(String(iniTitle), 'TopoAdc', SpinEdit3.Value);
-  IniFile.WriteString(String(iniTitle), 'TopoAmp', Combobox3.Text);
-  IniFile.WriteString(String(iniTitle), 'TopoCalibration', Edit3.Text);
-  IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
-  IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
-  IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
+  MemFile.WriteInteger(String(iniTitle), 'TopoAdc', SpinEdit3.Value);
+  MemFile.WriteString(String(iniTitle), 'TopoAmp', Combobox3.Text);
+  MemFile.WriteString(String(iniTitle), 'TopoCalibration', Edit3.Text);
+  MemFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
+  MemFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
+  MemFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
   //Parametros de Liner
-  IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
-  IniFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
+  MemFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
+  MemFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
+  MemFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
   //Parametros de Trip
-  IniFile.WriteInteger(String(iniTrip), 'CoarseDac', ConfigTripForm.SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniTrip), 'CurrentLim', ConfigTripForm.spinCurrentLimit.Value);
-  IniFile.WriteBool(String(iniTrip), 'ZPInverse', ConfigTripForm.CheckBox1.Checked);
-  IniFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
+  MemFile.WriteInteger(String(iniTrip), 'CoarseDac', ConfigTripForm.SpinEdit1.Value);
+  MemFile.WriteInteger(String(iniTrip), 'CurrentLim', ConfigTripForm.spinCurrentLimit.Value);
+  MemFile.WriteBool(String(iniTrip), 'ZPInverse', ConfigTripForm.CheckBox1.Checked);
+  MemFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
   //Parametros PID
-  IniFile.WriteInteger(String(iniPID), 'OutputDac', FormPID.SpinEdit2.Value);
+  MemFile.WriteInteger(String(iniPID), 'OutputDac', FormPID.SpinEdit2.Value);
 finally
-  IniFile.Free;
+  MemFile.UpdateFile;
+  MemFile.Free;
 end;
 end;
 

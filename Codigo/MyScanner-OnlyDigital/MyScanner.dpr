@@ -31,7 +31,6 @@ begin
   Application.CreateForm(TLinerForm, LinerForm);
   Application.CreateForm(TConfigLinerForm, ConfigLinerForm);
   Application.CreateForm(TTripForm, TripForm);
-  Application.CreateForm(TConfigForm, ConfigForm);
   Application.CreateForm(TblqDataSetForm, blqDataSetForm);
   Application.CreateForm(TblqLoaderForm, blqLoaderForm);
   Application.CreateForm(THeaderImgForm, HeaderImgForm);
@@ -39,6 +38,7 @@ begin
   Application.CreateForm(TDataAdcquisitionForm, DataAdcquisitionForm);
   Application.CreateForm(TFormPID, FormPID);
   Application.CreateForm(TConfig_IVForm, Config_IVForm);
+  Application.CreateForm(TConfigForm, ConfigForm);
   Application.CreateForm(TFormPaste, FormPaste);
   Application.Run;
 end.

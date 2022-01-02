@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, Spin, Math, IniFiles;
+  StdCtrls, ExtCtrls, Spin, Math, IniFiles, Vcl.Buttons;
 
 type
   TConfigForm = class(TForm)
@@ -58,9 +58,11 @@ type
     Label26: TLabel;
     ComboBox7: TComboBox;
     Edit2: TEdit;
+    SaveCfg: TSpeedButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure CheckBox4Click(Sender: TObject);
+    procedure SaveCfgClick(Sender: TObject);
   private
     { Private declarations }
     IniFile: TIniFile;
@@ -68,6 +70,7 @@ type
 //    const AnsiString iniTitle := 'Channels';
     iniLiner: AnsiString;
     iniTrip: AnsiString;
+    iniPID: AnsiString;
   public
     { Public declarations }
   end;
@@ -77,7 +80,7 @@ var
 
 implementation
 
-uses Scanner1, DataAdcquisition, Config_Liner, Config_Trip;
+uses Scanner1, DataAdcquisition, Config_Liner, Config_Trip, PID;
 
 {$R *.DFM}
 
@@ -129,38 +132,6 @@ else
   end;
 ScanForm.TrackBar3Change(self);
 
-// Guardamos los datos en el fichero de configuración
-// Leemos los datos del fichero de configuración
-IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
-try
-  //Parametros de barrido
-  IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
-  IniFile.WriteString(String(iniTitle), 'XYAmplifier', Combobox1.Text);
-  IniFile.WriteInteger(String(iniTitle), 'XPosDac', SpinEdit6.Value);
-  IniFile.WriteInteger(String(iniTitle), 'YPosDac', SpinEdit7.Value);
-  IniFile.WriteString(String(iniTitle), 'XYPosAmp', Combobox6.Text);
-  IniFile.WriteString(String(iniTitle), 'XYCalibration', Edit1.Text);
-  //Parametros de topo y corriente
-  IniFile.WriteInteger(String(iniTitle), 'TopoAdc', SpinEdit3.Value);
-  IniFile.WriteString(String(iniTitle), 'TopoAmp', Combobox3.Text);
-  IniFile.WriteString(String(iniTitle), 'TopoCalibration', Edit3.Text);
-  IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
-  IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
-  IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
-  //Parametros de Liner
-  IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
-  IniFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
-  //Parametros de Trip
-  IniFile.WriteInteger(String(iniTrip), 'CoarseDac', ConfigTripForm.SpinEdit1.Value);
-  IniFile.WriteInteger(String(iniTrip), 'CurrentLim', ConfigTripForm.spinCurrentLimit.Value);
-  IniFile.WriteBool(String(iniTrip), 'ZPInverse', ConfigTripForm.CheckBox1.Checked);
-  IniFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
-finally
-  IniFile.Free;
-end;
-
 end;
 
 procedure TConfigForm.FormCreate(Sender: TObject);
@@ -168,7 +139,8 @@ begin
 // Leemos los datos del fichero de configuración
 iniTitle := 'Channels';
 iniLiner := 'Liner';
-iniTrip := 'Trip' ;
+iniTrip := 'Trip';
+iniPID := 'PID';
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
   //Parametros de barrido
@@ -203,7 +175,9 @@ try
   ConfigTripForm.spinCurrentLimit.Value := IniFile.ReadInteger(String(iniTrip), 'CurrentLim', 50);
   ConfigTripForm.CheckBox1.Checked := IniFile.ReadBool(String(iniTrip), 'ZPInverse', False);
   ConfigTripForm.CheckBox2.Checked := IniFile.ReadBool(String(iniTrip), 'CurrentInverse', False);
-
+  //Parametros PID
+  FormPID.SpinEdit1.Value := SpinEdit4.Value;
+  FormPID.SpinEdit2.Value := IniFile.ReadInteger(String(iniPID), 'OutputDac', 6);
 finally
   IniFile.Free;
 end;
@@ -223,6 +197,42 @@ ScanForm.CalTopo:=StrtoFloat(ConfigForm.Edit3.Text);
 ScanForm.MultI:=StrtoInt(ConfigForm.Edit4.Text);
 ScanForm.ReadTopo:=Checkbox1.checked;
 ScanForm.ReadCurrent:=Checkbox2.checked;
+end;
+
+procedure TConfigForm.SaveCfgClick(Sender: TObject);
+begin
+// Guardamos los datos en el fichero de configuración
+IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
+try
+  //Parametros de barrido
+  IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
+  IniFile.WriteString(String(iniTitle), 'XYAmplifier', Combobox1.Text);
+  IniFile.WriteInteger(String(iniTitle), 'XPosDac', SpinEdit6.Value);
+  IniFile.WriteInteger(String(iniTitle), 'YPosDac', SpinEdit7.Value);
+  IniFile.WriteString(String(iniTitle), 'XYPosAmp', Combobox6.Text);
+  IniFile.WriteString(String(iniTitle), 'XYCalibration', Edit1.Text);
+  //Parametros de topo y corriente
+  IniFile.WriteInteger(String(iniTitle), 'TopoAdc', SpinEdit3.Value);
+  IniFile.WriteString(String(iniTitle), 'TopoAmp', Combobox3.Text);
+  IniFile.WriteString(String(iniTitle), 'TopoCalibration', Edit3.Text);
+  IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
+  IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
+  IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
+  //Parametros de Liner
+  IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
+  IniFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
+  //Parametros de Trip
+  IniFile.WriteInteger(String(iniTrip), 'CoarseDac', ConfigTripForm.SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniTrip), 'CurrentLim', ConfigTripForm.spinCurrentLimit.Value);
+  IniFile.WriteBool(String(iniTrip), 'ZPInverse', ConfigTripForm.CheckBox1.Checked);
+  IniFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
+  //Parametros PID
+  IniFile.WriteInteger(String(iniPID), 'OutputDac', FormPID.SpinEdit2.Value);
+finally
+  IniFile.Free;
+end;
 end;
 
 procedure TConfigForm.CheckBox4Click(Sender: TObject);

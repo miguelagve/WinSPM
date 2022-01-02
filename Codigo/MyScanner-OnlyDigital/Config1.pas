@@ -64,8 +64,9 @@ type
   private
     { Private declarations }
     IniFile: TIniFile;
-    iniTitle: AnsiString;
+    iniTitle: AnsiString; //No veo razon para usar ANSI. Es una cuestion de compatibilidad?
 //    const AnsiString iniTitle := 'Channels';
+    //iniLiner: AnsiString;
   public
     { Public declarations }
   end;
@@ -75,7 +76,7 @@ var
 
 implementation
 
-uses Scanner1, DataAdcquisition;
+uses Scanner1, DataAdcquisition{, Config_Liner};
 
 {$R *.DFM}
 
@@ -131,9 +132,21 @@ ScanForm.TrackBar3Change(self);
 // Leemos los datos del fichero de configuración
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
+  //Parametros de barrido
   IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
   IniFile.WriteInteger(String(iniTitle), 'YScanDac', SpinEdit2.Value);
-  IniFile.WriteString(String(iniTitle), 'XAmplifier', Combobox1.Text);
+  IniFile.WriteString(String(iniTitle), 'XYAmplifier', Combobox1.Text);
+  IniFile.WriteInteger(String(iniTitle), 'XPosDac', SpinEdit6.Value);
+  IniFile.WriteInteger(String(iniTitle), 'YPosDac', SpinEdit7.Value);
+  IniFile.WriteString(String(iniTitle), 'XYPosAmp', Combobox6.Text);
+  IniFile.WriteString(String(iniTitle), 'XYCalibration', Edit1.Text);
+  //Parametros de topo y corriente
+  IniFile.WriteInteger(String(iniTitle), 'TopoAdc', SpinEdit3.Value);
+  IniFile.WriteString(String(iniTitle), 'TopoAmp', Combobox3.Text);
+  IniFile.WriteString(String(iniTitle), 'TopoCalibration', Edit3.Text);
+  IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
+  IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
+  IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
 finally
   IniFile.Free;
 end;
@@ -144,11 +157,28 @@ procedure TConfigForm.FormCreate(Sender: TObject);
 begin
 // Leemos los datos del fichero de configuración
 iniTitle := 'Channels';
+//iniLiner := 'Liner';
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
+  //Parametros de barrido
   SpinEdit1.Value := IniFile.ReadInteger(String(iniTitle), 'XScanDac', 0);
-  SpinEdit2.Value := IniFile.ReadInteger(String(iniTitle), 'YScanDac', 5);
-  Combobox1.Text := IniFile.ReadString(String(iniTitle), 'XAmplifier', '13');
+  SpinEdit2.Value := IniFile.ReadInteger(String(iniTitle), 'YScanDac', 2);
+  Combobox1.Text := IniFile.ReadString(String(iniTitle), 'XYAmplifier', '13');
+  Combobox2.Text := Combobox1.Text;
+  SpinEdit6.Value := IniFile.ReadInteger(String(iniTitle), 'XPosDac', 1);
+  SpinEdit7.Value := IniFile.ReadInteger(String(iniTitle), 'YPosDac', 3);
+  Combobox6.Text := IniFile.ReadString(String(iniTitle), 'XYPosAmp', '13');
+  Combobox7.Text := Combobox6.Text;
+  Edit1.Text := IniFile.ReadString(String(iniTitle), 'XYCalibration', '5');
+  Edit2.Text := Edit1.Text;
+  //Parametros de topo y corriente
+  SpinEdit3.Value := IniFile.ReadInteger(String(iniTitle), 'TopoAdc', 2);
+  Combobox3.Text := IniFile.ReadString(String(iniTitle), 'TopoAmp', '13');
+  Edit3.Text := IniFile.ReadString(String(iniTitle), 'TopoCalibration', '1');
+  SpinEdit4.Value := IniFile.ReadInteger(String(iniTitle), 'CurrentAdc', 0);
+  Combobox4.Text := IniFile.ReadString(String(iniTitle), 'CurrentAmp', '8');
+  Edit4.Text := IniFile.ReadString(String(iniTitle), 'CurrentMult', '-1');
+
 finally
   IniFile.Free;
 end;

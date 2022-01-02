@@ -66,7 +66,8 @@ type
     IniFile: TIniFile;
     iniTitle: AnsiString; //No veo razon para usar ANSI. Es una cuestion de compatibilidad?
 //    const AnsiString iniTitle := 'Channels';
-    //iniLiner: AnsiString;
+    iniLiner: AnsiString;
+    iniTrip: AnsiString;
   public
     { Public declarations }
   end;
@@ -76,7 +77,7 @@ var
 
 implementation
 
-uses Scanner1, DataAdcquisition{, Config_Liner};
+uses Scanner1, DataAdcquisition, Config_Liner, Config_Trip;
 
 {$R *.DFM}
 
@@ -147,6 +148,15 @@ try
   IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
   IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
   IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
+  //Parametros de Liner
+  IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
+  IniFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
+  //Parametros de Trip
+  IniFile.WriteInteger(String(iniTrip), 'CoarseDac', ConfigTripForm.SpinEdit1.Value);
+  IniFile.WriteInteger(String(iniTrip), 'CurrentLim', ConfigTripForm.spinCurrentLimit.Value);
+  IniFile.WriteBool(String(iniTrip), 'ZPInverse', ConfigTripForm.CheckBox1.Checked);
+  IniFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
 finally
   IniFile.Free;
 end;
@@ -157,7 +167,8 @@ procedure TConfigForm.FormCreate(Sender: TObject);
 begin
 // Leemos los datos del fichero de configuración
 iniTitle := 'Channels';
-//iniLiner := 'Liner';
+iniLiner := 'Liner';
+iniTrip := 'Trip' ;
 IniFile := TIniFile.Create(GetCurrentDir+'\Config.ini');
 try
   //Parametros de barrido
@@ -178,6 +189,20 @@ try
   SpinEdit4.Value := IniFile.ReadInteger(String(iniTitle), 'CurrentAdc', 0);
   Combobox4.Text := IniFile.ReadString(String(iniTitle), 'CurrentAmp', '8');
   Edit4.Text := IniFile.ReadString(String(iniTitle), 'CurrentMult', '-1');
+  //Parametros de Liner
+  ConfigLinerForm.SpinEdit1.Value := IniFile.ReadInteger(String(iniLiner), 'IVRampDac', 5);
+  ConfigLinerForm.seADCxaxis.Value := IniFile.ReadInteger(String(iniLiner), 'IVReadAdc', 0);
+  ConfigLinerForm.Edit1.Text := IniFile.ReadString(String(iniLiner), 'IVMult', '10');
+  //En principio es mejor no cambiar este valor por defecto y solo cambiarlo manualmente
+  //Podriamos leer un valor por defecto para las curvas reducidas pero que haya que marcar la casilla manualmente
+  //ConfigLinerForm.seReduceRampFactor.Value := IniFile.ReadInteger(String(iniLiner), 'ReduceRamp', 1);
+
+  //Parametros de Trip
+  ConfigTripForm.SpinEdit1.Value := IniFile.ReadInteger(String(iniTrip), 'CoarseDac', 4);
+  ConfigTripForm.SpinEdit2.Value := SpinEdit4.Value;
+  ConfigTripForm.spinCurrentLimit.Value := IniFile.ReadInteger(String(iniTrip), 'CurrentLim', 50);
+  ConfigTripForm.CheckBox1.Checked := IniFile.ReadBool(String(iniTrip), 'ZPInverse', False);
+  ConfigTripForm.CheckBox2.Checked := IniFile.ReadBool(String(iniTrip), 'CurrentInverse', False);
 
 finally
   IniFile.Free;

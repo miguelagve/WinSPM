@@ -26,12 +26,12 @@ begin
   Application.Initialize;
   Application.Title := 'WinSPM';
   Application.CreateForm(TScanForm, ScanForm);
-  Application.CreateForm(TConfigForm, ConfigForm);
   Application.CreateForm(TConfigTripForm, ConfigTripForm);
   Application.CreateForm(TScanningForm, ScanningForm);
   Application.CreateForm(TLinerForm, LinerForm);
   Application.CreateForm(TConfigLinerForm, ConfigLinerForm);
   Application.CreateForm(TTripForm, TripForm);
+  Application.CreateForm(TConfigForm, ConfigForm);
   Application.CreateForm(TblqDataSetForm, blqDataSetForm);
   Application.CreateForm(TblqLoaderForm, blqLoaderForm);
   Application.CreateForm(THeaderImgForm, HeaderImgForm);

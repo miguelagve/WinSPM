@@ -163,6 +163,7 @@ try
   Edit4.Text := IniFile.ReadString(String(iniTitle), 'CurrentMult', '-1');
   //Parametros de Liner
   ConfigLinerForm.SpinEdit1.Value := IniFile.ReadInteger(String(iniLiner), 'IVRampDac', 5);
+  ConfigLinerForm.CheckBox4.Checked := IniFile.ReadBool(String(iniLiner), 'IVReverseDac', False);
   ConfigLinerForm.seADCxaxis.Value := IniFile.ReadInteger(String(iniLiner), 'IVReadAdc', 0);
   ConfigLinerForm.Edit1.Text := IniFile.ReadString(String(iniLiner), 'IVMult', '10');
   //En principio es mejor no cambiar este valor por defecto y solo cambiarlo manualmente
@@ -222,6 +223,7 @@ try
   IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
   //Parametros de Liner
   IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
+  IniFile.WriteBool(String(iniLiner), 'IVReverseDac', ConfigLinerForm.CheckBox4.Checked);
   IniFile.WriteInteger(String(iniLiner), 'IVReadAdc', ConfigLinerForm.seADCxaxis.Value);
   IniFile.WriteString(String(iniLiner), 'IVMult', ConfigLinerForm.Edit1.Text);
   //Parametros de Trip

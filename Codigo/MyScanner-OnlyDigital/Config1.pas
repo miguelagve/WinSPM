@@ -71,6 +71,7 @@ type
     iniLiner: AnsiString;
     iniTrip: AnsiString;
     iniPID: AnsiString;
+    ConfigDir: String;
   public
     { Public declarations }
   end;
@@ -141,7 +142,8 @@ iniTitle := 'Channels';
 iniLiner := 'Liner';
 iniTrip := 'Trip';
 iniPID := 'PID';
-IniFile := TMemIniFile.Create(GetCurrentDir+'\Config.ini',TEncoding.ANSI);
+ConfigDir := GetCurrentDir;
+IniFile := TMemIniFile.Create(ConfigDir+'\Config.ini',TEncoding.ANSI);
 try
   //Parametros de barrido
   SpinEdit1.Value := IniFile.ReadInteger(String(iniTitle), 'XScanDac', 0);
@@ -161,6 +163,10 @@ try
   SpinEdit4.Value := IniFile.ReadInteger(String(iniTitle), 'CurrentAdc', 0);
   Combobox4.Text := IniFile.ReadString(String(iniTitle), 'CurrentAmp', '8');
   Edit4.Text := IniFile.ReadString(String(iniTitle), 'CurrentMult', '-1');
+  //Incluyo los parametros para una tercera entrada pero hay que activarla manualmente
+  SpinEdit5.Value := IniFile.ReadInteger(String(iniTitle), 'OtherAdc', 1);
+  Combobox5.Text := IniFile.ReadString(String(iniTitle), 'OtherAmp', '9');
+  Edit5.Text := IniFile.ReadString(String(iniTitle), 'OtherMult', '1');
   //Parametros de Liner
   ConfigLinerForm.SpinEdit1.Value := IniFile.ReadInteger(String(iniLiner), 'IVRampDac', 5);
   ConfigLinerForm.CheckBox4.Checked := IniFile.ReadBool(String(iniLiner), 'IVReverseDac', False);
@@ -179,6 +185,7 @@ try
   //Parametros PID
   FormPID.SpinEdit1.Value := SpinEdit4.Value;
   FormPID.SpinEdit2.Value := IniFile.ReadInteger(String(iniPID), 'OutputDac', 6);
+  FormPID.CheckBox2.Checked := IniFile.ReadBool(String(iniPID), 'PIDReverseOut', False);
 finally
   IniFile.Free;
 end;
@@ -204,7 +211,8 @@ procedure TConfigForm.SaveCfgClick(Sender: TObject);
 begin
 // Guardamos los datos en el fichero de configuración
 //Podemos usar UTF8, pero con Ansi el archivo deberia funcionar con versiones anteriores sin modificaciones
-IniFile := TMemIniFile.Create(GetCurrentDir+'\Config.ini',TEncoding.ANSI);
+//Funciona llamando a GetCurrentDir en esta version, pero asi nos aseguramos de que es el directorio desde el que se ha ejecutado
+IniFile := TMemIniFile.Create(ConfigDir+'\Config.ini',TEncoding.ANSI);
 try
   //Parametros de barrido
   IniFile.WriteInteger(String(iniTitle), 'XScanDac', SpinEdit1.Value);
@@ -221,6 +229,9 @@ try
   IniFile.WriteInteger(String(iniTitle), 'CurrentAdc', SpinEdit4.Value);
   IniFile.WriteString(String(iniTitle), 'CurrentAmp', Combobox4.Text);
   IniFile.WriteString(String(iniTitle), 'CurrentMult', Edit4.Text);
+  IniFile.WriteInteger(String(iniTitle), 'OtherAdc', SpinEdit5.Value);
+  IniFile.WriteString(String(iniTitle), 'OtherAmp', Combobox5.Text);
+  IniFile.WriteString(String(iniTitle), 'OtherMult', Edit5.Text);
   //Parametros de Liner
   IniFile.WriteInteger(String(iniLiner), 'IVRampDac', ConfigLinerForm.SpinEdit1.Value);
   IniFile.WriteBool(String(iniLiner), 'IVReverseDac', ConfigLinerForm.CheckBox4.Checked);
@@ -233,6 +244,7 @@ try
   IniFile.WriteBool(String(iniTrip), 'CurrentInverse', ConfigTripForm.CheckBox2.Checked);
   //Parametros PID
   IniFile.WriteInteger(String(iniPID), 'OutputDac', FormPID.SpinEdit2.Value);
+  IniFile.WriteBool(String(iniPID), 'PIDReverseOut', FormPID.CheckBox2.Checked);
 finally
   IniFile.UpdateFile;
   IniFile.Free;

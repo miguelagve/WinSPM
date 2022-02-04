@@ -934,16 +934,24 @@ begin
   (BufferDest+i)^ := AnsiChar(2); Inc(i); // Número de bytes a transmitir menos 1
   (BufferDest+i)^ := AnsiChar(0); Inc(i);
   if ScanForm.VersionDivider=False then
-  begin
-    (BufferDest+i)^ := AnsiChar(03);
-    Inc(i); // Registro: Ambos DACs
-  end
+    begin
+      (BufferDest+i)^ := AnsiChar(03); // Registro: Ambos DACs (Canales 0 y 2)
+      Inc(i); //No usamos DACAttNr, porque siempre cambiamos los dos canales
+    end
   else
     begin
-      if (DACAttNr=1) then (BufferDest+i)^ := AnsiChar(03); Inc(i); // registro DAC A Canal 0
-      if (DACAttNr=2) then (BufferDest+i)^ := AnsiChar(03); Inc(i); // registro DAC A Canal 2
-      if (DACAttNr=3) then (BufferDest+i)^ := AnsiChar(03); Inc(i); // registro DAC A Canal 5
-      if (DACAttNr=4) then (BufferDest+i)^ := AnsiChar(03); Inc(i); // registro DAC A Canal 6
+      //if (DACAttNr=1) then (BufferDest+i)^ := AnsiChar(00) // Registro: DAC A (Canal 0)
+      //else if (DACAttNr=2) then (BufferDest+i)^ := AnsiChar(01) // Registro: DAC B (Canal 2)
+      //else if (DACAttNr=3) then (BufferDest+i)^ := AnsiChar(02) // Registro: DAC C (Canal 5)
+      //else if (DACAttNr=4) then (BufferDest+i)^ := AnsiChar(03); // Registro: DAC D (Canal 6)
+      // Case es totalmente equivalente. Dejo los if por si no funciona correctamente
+      case DACAttNr of
+        1: (BufferDest+i)^ := AnsiChar(00); // Registro: DAC A (Canal 0)
+        2: (BufferDest+i)^ := AnsiChar(01); // Registro: DAC B (Canal 2)
+        3: (BufferDest+i)^ := AnsiChar(02); // Registro: DAC C (Canal 5)
+        4: (BufferDest+i)^ := AnsiChar(03); // Registro: DAC D (Canal 6)
+      end;
+      Inc(i);
     end;
   (BufferDest+i)^ := AnsiChar(valueDAC shr 8); Inc(i);  // Parte alta del valor del DAC
   (BufferDest+i)^ := AnsiChar(valueDAC and $FF); Inc(i); // Parte baja del valor del DAC
